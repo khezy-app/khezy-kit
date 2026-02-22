@@ -1,0 +1,6 @@
+plugins {
+    id("khezy.base-java-library")
+    id("khezy.java-use-junit5")
+    id("khezy.maven-publish")
+    id("khezy.code-quality")
+}

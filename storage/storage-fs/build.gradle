@@ -1,0 +1,11 @@
+plugins {
+    id("khezy.java-library")
+}
+
+ext {
+    khezyStorageApiVersion = "1.0.0-SNAPSHOT"
+}
+
+dependencies {
+    api "io.github.khezyapp:storage-api:${khezyStorageApiVersion}"
+}

@@ -1,0 +1,25 @@
+plugins {
+    id("checkstyle")
+}
+
+checkstyle {
+    toolVersion = "13.1.0"
+    def checkStyleFileUri = getClass().getResource("/config/checkstyle/checkstyle.xml")
+    config = resources.text.fromUri(checkStyleFileUri)
+    showViolations = true
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = false
+        html.required = true
+        sarif.required = true
+    }
+}
+
+tasks.withType(Javadoc).configureEach {
+    options {
+        // This stops the "warning: no comment" and HTML syntax messages.
+        addStringOption('Xdoclint:none', '-quiet')
+    }
+}

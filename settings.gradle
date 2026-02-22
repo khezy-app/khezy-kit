@@ -1,0 +1,16 @@
+pluginManagement {
+    includeBuild("build-logic")
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'khezy-kit'
+
+includeBuild("storage/storage-api")
+includeBuild("storage/storage-fs")
+
+includeBuild("utils/string-util")
