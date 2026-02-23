@@ -1,4 +1,4 @@
-package io.github.khezy.utils;
+package io.github.khezyapp.utils;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class StringUtilTest {
     @DisplayName("isBlank - should return true for blank inputs")
     void isBlankCase(final String input) {
         if (Objects.isNull(input)) {
-            assertFalse(StringUtil.isBlank(null));
+            assertTrue(StringUtil.isBlank(null));
         } else {
             assertTrue(StringUtil.isBlank(input));
         }
@@ -359,5 +359,110 @@ class StringUtilTest {
     void rsplitByPreservedEmptyNullInputCase() {
         List<String> result = StringUtil.rsplitByPreservedEmpty(null, ",", 0);
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    @DisplayName("testContains: Should return true only when string contains non-null content")
+    void testContains() {
+        assertAll(
+                () -> assertTrue(StringUtil.contains("Hello World", "Hello")),
+                () -> assertTrue(StringUtil.contains("jOOQ Specification", "Spec")),
+                () -> assertFalse(StringUtil.contains("Hello", "World")),
+                () -> assertFalse(StringUtil.contains("", "Hello")),
+                () -> assertFalse(StringUtil.contains("   ", "Hello")),
+                () -> assertFalse(StringUtil.contains(null, "Hello")),
+                () -> assertFalse(StringUtil.contains("Hello", null))
+        );
+    }
+
+    @Test
+    @DisplayName("testToLowerCase: Should convert to lower case or return original if blank")
+    void testToLowerCase() {
+        assertAll(
+                () -> assertEquals("hello", StringUtil.toLowerCase("HELLO")),
+                () -> assertEquals("jooq", StringUtil.toLowerCase("jOOQ")),
+                () -> assertEquals("", StringUtil.toLowerCase("")),
+                () -> assertEquals("   ", StringUtil.toLowerCase("   ")),
+                () -> assertNull(StringUtil.toLowerCase(null))
+        );
+    }
+
+    @Test
+    @DisplayName("testToUpperCase: Should convert to upper case or return original if blank")
+    void testToUpperCase() {
+        assertAll(
+                () -> assertEquals("HELLO", StringUtil.toUpperCase("hello")),
+                () -> assertEquals("JOOQ", StringUtil.toUpperCase("jOOQ")),
+                () -> assertEquals("", StringUtil.toUpperCase("")),
+                () -> assertEquals("   ", StringUtil.toUpperCase("   ")),
+                () -> assertNull(StringUtil.toUpperCase(null))
+        );
+    }
+
+    @Test
+    @DisplayName("testCapitalize: Should capitalize first char and lowercase others")
+    void testCapitalize() {
+        assertAll(
+                () -> assertEquals("Hello", StringUtil.capitalize("hELLO")),
+                () -> assertEquals("Jooq", StringUtil.capitalize("jOOQ")),
+                () -> assertEquals("A", StringUtil.capitalize("a")),
+                () -> assertEquals("A", StringUtil.capitalize("A")),
+                () -> assertEquals("", StringUtil.capitalize("")),
+                () -> assertEquals("   ", StringUtil.capitalize("   ")),
+                () -> assertNull(StringUtil.capitalize(null))
+        );
+    }
+
+    @Test
+    @DisplayName("testWordCapitalize: Should capitalize each word in a standard string")
+    void testWordCapitalizeStandard() {
+        final var input = "hello world from jooq";
+        final var expected = "Hello World From Jooq";
+        assertEquals(expected, StringUtil.wordCapitalize(input));
+    }
+
+    @Test
+    @DisplayName("testWordCapitalize: Should handle mixed case input correctly")
+    void testWordCapitalizeMixedCase() {
+        final var input = "jOOQ sPeCiFiCaTiOn";
+        final var expected = "Jooq Specification";
+        assertEquals(expected, StringUtil.wordCapitalize(input));
+    }
+
+    @Test
+    @DisplayName("testWordCapitalize: Should handle Unicode spaces (NFKC normalization)")
+    void testWordCapitalizeUnicodeSpaces() {
+        // \u00A0 is a non-breaking space, which NFKC normalizes to \u0020 (common space)
+        final var input = "Unicode\u00A0Space";
+        final var expected = "Unicode Space";
+        assertEquals(expected, StringUtil.wordCapitalize(input));
+    }
+
+    @Test
+    @DisplayName("testWordCapitalize: Should return original value for blank or null strings")
+    void testWordCapitalizeBlank() {
+        assertAll(
+                () -> assertNull(StringUtil.wordCapitalize(null)),
+                () -> assertEquals("", StringUtil.wordCapitalize("")),
+                () -> assertEquals("   ", StringUtil.wordCapitalize("   "))
+        );
+    }
+
+    @Test
+    @DisplayName("testWordCapitalize: Should handle strings with multiple spaces")
+    void testWordCapitalizeMultipleSpaces() {
+        final var input = "multiple   spaces";
+        // split(" ") on "   " creates empty strings in the array
+        // capitalize("") returns "", so join puts them back
+        final var expected = "Multiple   Spaces";
+        assertEquals(expected, StringUtil.wordCapitalize(input));
+    }
+
+    @Test
+    @DisplayName("testWordCapitalize: Should handle single character words")
+    void testWordCapitalizeSingleChars() {
+        final var input = "a b c";
+        final var expected = "A B C";
+        assertEquals(expected, StringUtil.wordCapitalize(input));
     }
 }

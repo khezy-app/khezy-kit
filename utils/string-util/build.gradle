@@ -1,3 +1,16 @@
 plugins {
     id("khezy.java-library")
 }
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'String Util'
+        description = """
+        A lightweight, zero-dependency Java utility library providing essential string manipulation methods. 
+        It features null-safe operations for case conversion, Unicode-aware normalization (NFKC), 
+        word-based capitalization, and enhanced search capabilities to simplify common text processing tasks."""
+    }
+}

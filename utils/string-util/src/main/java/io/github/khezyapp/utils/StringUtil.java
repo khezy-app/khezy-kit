@@ -1,5 +1,6 @@
-package io.github.khezy.utils;
+package io.github.khezyapp.utils;
 
+import java.text.Normalizer;
 import java.util.*;
 
 /**
@@ -52,7 +53,7 @@ public final class StringUtil {
     public static boolean isBlank(final String text) {
         return Optional.ofNullable(text)
                 .map(String::isBlank)
-                .orElse(false);
+                .orElse(true);
     }
 
     /**
@@ -401,5 +402,87 @@ public final class StringUtil {
 
     private static String returnEmptyIfNull(final boolean returnEmptyIfNull) {
         return returnEmptyIfNull ? "" : null;
+    }
+
+    /**
+     * Checks if the specified string contains the given content.
+     *
+     * @param str the string to check, may be null
+     * @param content the sequence of characters to search for, may be null
+     * @return true if the string contains the content, false if either is null or the string is blank
+     */
+    public static boolean contains(final String str,
+                                   final String content) {
+        if (isBlank(str) || Objects.isNull(content)) {
+            return false;
+        }
+        return str.contains(content);
+    }
+
+    /**
+     * Converts a string to lower case.
+     *
+     * @param str the string to convert, may be null
+     * @return the lowercased string, or the original string if it is blank
+     */
+    public static String toLowerCase(final String str) {
+        if (isBlank(str)) {
+            return str;
+        }
+        return str.toLowerCase();
+    }
+
+    /**
+     * Converts a string to upper case.
+     *
+     * @param str the string to convert, may be null
+     * @return the uppercased string, or the original string if it is blank
+     */
+    public static String toUpperCase(final String str) {
+        if (isBlank(str)) {
+            return str;
+        }
+        return str.toUpperCase();
+    }
+
+    /**
+     * Capitalizes a string by converting the first character to upper case
+     * and the remaining characters to lower case.
+     *
+     * @param str the string to capitalize, may be null
+     * @return the capitalized string, or the original string if it is blank
+     */
+    public static String capitalize(final String str) {
+        if (isBlank(str)) {
+            return str;
+        }
+        if (str.length() == 1) {
+            return str.toUpperCase();
+        } else {
+            return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+        }
+    }
+
+    /**
+     * Capitalizes each word in a string by converting the first character of every word
+     * to upper case and the remaining characters to lower case.
+     * <p>
+     * The input string is normalized using Unicode Normalization Form KC (NFKC)
+     * before processing to ensure consistent character representation.
+     * </p>
+     *
+     * @param str the string to capitalize per word, may be null
+     * @return the word-capitalized string, or the original string if it is blank
+     */
+    public static String wordCapitalize(final String str) {
+        if (isBlank(str)) {
+            return str;
+        }
+        final var words = Normalizer.normalize(str, Normalizer.Form.NFKC).split(" ", -1);
+        final var result = new ArrayList<String>();
+        for (String word : words) {
+            result.add(capitalize(word));
+        }
+        return String.join(" ", result);
     }
 }

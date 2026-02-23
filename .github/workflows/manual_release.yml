@@ -1,0 +1,55 @@
+name: Flexible Release to Maven Central
+
+on:
+  workflow_dispatch:
+    inputs:
+      projects:
+        description: 'Comma-separated list of projects to release (e.g., library-a, library-b) or "all"'
+        required: true
+        default: 'all'
+      version:
+        description: 'Version to release (e.g., 1.2.0)'
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          server-id: ossrh
+
+      - name: Publish with Gradle
+        run: |
+          # Determine the tasks to run
+          if [ "${{ github.event.inputs.projects }}" = "all" ]; then
+            # Run the publish task for the entire composite build
+            TASKS="publishToMavenCentral"
+          else
+            # Convert comma-separated names into specific Gradle tasks
+            # e.g., "lib-a, lib-b" becomes ":lib-a:publishToMavenCentral :lib-b:publishToMavenCentral"
+            TASKS=""
+            IFS=',' read -ra ADDR <<< "${{ github.event.inputs.projects }}"
+            for i in "${ADDR[@]}"; do
+              # Strip whitespace and prepend colon/task name
+              CLEAN_NAME=$(echo $i | xargs)
+              TASKS="$TASKS :$CLEAN_NAME:publishToMavenCentral"
+            done
+          fi
+
+          echo "Executing: ./gradlew $TASKS"
+          
+          ./gradlew $TASKS \
+            -Pversion=${{ github.event.inputs.version }} \
+            --no-daemon
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.GPG_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_ARMOR_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSWORD }}
