@@ -1,0 +1,21 @@
+plugins {
+    id("java")
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+ext {
+    slf4jVersion = "2.0.17"
+    lombokVersion = "1.18.42"
+}
+
+dependencies {
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    testImplementation "org.slf4j:slf4j-simple:${slf4jVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}

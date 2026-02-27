@@ -1,0 +1,29 @@
+plugins {
+    id("khezy.java-library")
+    id("khezy.java-lombok")
+    id 'me.champeau.jmh' version '0.7.3'
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'Dynamic Access Java Object'
+        description = """
+        A lightweight, Java library for navigating and manipulating complex object graphs. 
+        It provides a unified API to access properties across Maps, Records, POJOs, and Lists using a simple string-path syntax, 
+        effectively eliminating manual casting and boilerplate null-checks."""
+    }
+}
+
+jmh {
+    // This tells the plugin to include the main code in the benchmark classpath
+    includeTests = false
+    zip64 = true
+}
+
+dependencies {
+    jmhImplementation "org.projectlombok:lombok:${lombokVersion}"
+    jmhAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
