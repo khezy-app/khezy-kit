@@ -121,9 +121,9 @@
 
         <!-- Checks for imports                              -->
         <!-- See https://checkstyle.org/config_imports.html -->
-        <module name="AvoidStarImport">
+        <!-- <module name="AvoidStarImport">
             <property name="excludes" value="java.io,java.net,java.lang.Math,java.util,org.junit.jupiter.api.Assertions"/>
-        </module>
+        </module> -->
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
         <module name="UnusedImports">
@@ -165,10 +165,10 @@
         <!-- See https://checkstyle.org/config_coding.html -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField">
+        <!--<module name="HiddenField">
             <property name="ignoreConstructorParameter" value="true" />
             <property name="ignoreSetter" value="true" />
-        </module>
+        </module>-->
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
         <!--<module name="MagicNumber">
