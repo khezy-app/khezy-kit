@@ -2,16 +2,16 @@
 
 A collection of core Java utility libraries and domain abstractions designed to simplify common development tasks.
 
-## 🚀 Purpose
+## Purpose
 
 khezy-kit serves as the "engine room" for the KHEZY ecosystem. It provides the pure Java logic, interfaces, and base implementations for tasks that are repeated across every project—such as 
 storage abstractions, and security utilities—allowing you to focus on your application's unique business logic.
 
 ## 🛠 Tech Stack
-- Language: Java (LTS)
+- **Language**: Java (LTS)
 - **Build System**: Gradle (utilizing Composite Builds for modularity)
 
-## 📦 Key Features & Modules
+## Key Features & Modules
 
 - **Storage Abstractions**: Unified interfaces for handling file storage and data persistence patterns.
 - **Domain Kits**: Base classes and interfaces that enforce clean architecture and consistent data structures.
