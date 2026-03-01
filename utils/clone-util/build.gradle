@@ -1,0 +1,25 @@
+plugins {
+    id("khezy.java-library")
+    id("khezy.java-lombok")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'Clone Util'
+        description = """
+        A lightweight, reflection-based deep cloning library for Java. It is designed to create complete, \
+        detached copies of complex object graphs while maintaining referential integrity (handling circular \
+        references) and respecting object immutability."""
+    }
+}
+
+ext {
+    jodaVersion = "2.14.0"
+}
+
+dependencies {
+    testImplementation "joda-time:joda-time:${jodaVersion}"
+}
