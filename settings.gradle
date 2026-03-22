@@ -16,3 +16,5 @@ includeBuild("storage/storage-fs")
 includeBuild("utils/string-util")
 includeBuild("utils/dynamic-object")
 includeBuild("utils/clone-util")
+
+includeBuild("securities/data-masker")

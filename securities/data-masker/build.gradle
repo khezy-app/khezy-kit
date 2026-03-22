@@ -1,0 +1,17 @@
+plugins {
+    id("khezy.java-library")
+    id("khezy.java-lombok")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'Khezy Data Masker'
+        description = """
+        A lightweight, reflection-based Java library designed to redact or remove sensitive information from objects, 
+        maps, and collections. It is built to help developers comply with data privacy regulations (like GDPR or PCI-DSS) 
+        by ensuring sensitive data is masked before logging or transmitting."""
+    }
+}
