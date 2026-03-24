@@ -8,7 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 
 /**
  * A sensitive data masking strategy specifically designed for standard Java Beans and POJOs.
@@ -32,6 +35,29 @@ import java.util.Objects;
  */
 @Slf4j
 public class BeanSensitiveMaskerStrategy implements SensitiveMaskerStrategy {
+    private static final Set<String> IGNORE_PROPERTIES = Set.of(
+            "class",
+            "hibernateLazyInitializer",
+            "handler",
+            "fieldHandler",
+            "$_hibernate_interceptor"
+    );
+
+    private final Set<String> ignoreProperties;
+    private Function<Object, Class<?>> getBeanClass = Object::getClass;
+
+    public BeanSensitiveMaskerStrategy() {
+        this.ignoreProperties = new HashSet<>(IGNORE_PROPERTIES);
+    }
+
+    public BeanSensitiveMaskerStrategy(final Set<String> ignoreProperties,
+                                       final Function<Object, Class<?>> getBeanClass) {
+        Objects.requireNonNull(ignoreProperties, "ignoreProperties can not be null");
+        Objects.requireNonNull(getBeanClass, "getBeanClass can not be null");
+        this.ignoreProperties = new HashSet<>(IGNORE_PROPERTIES);
+        this.ignoreProperties.addAll(ignoreProperties);
+        this.getBeanClass = getBeanClass;
+    }
 
     @Override
     public boolean supports(final Object payload) {
@@ -46,11 +72,11 @@ public class BeanSensitiveMaskerStrategy implements SensitiveMaskerStrategy {
         final var proceedObject = new HashMap<String, Object>();
         context.registerVisited(payload, proceedObject);
 
-        final var clz = payload.getClass();
+        final var clz = getBeanClass.apply(payload);
         final var pds = ReflectionUtils.getPropertyDescriptors(clz);
 
         for (final var pd : pds) {
-            if ("class".equals(pd.getName())) {
+            if (ignoreProperties.contains(pd.getName())) {
                 continue;
             }
 

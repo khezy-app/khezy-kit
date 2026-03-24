@@ -70,7 +70,7 @@ public class CollectionSensitiveMaskerStrategy implements SensitiveMaskerStrateg
     private Object maskArray(final Object payload,
                              final SensitiveMaskerContext context) {
         final var length = Array.getLength(payload);
-        final var proceedArray = Array.newInstance(payload.getClass().getComponentType(), length);
+        final var proceedArray = Array.newInstance(Object.class, length);
 
         context.registerVisited(payload, proceedArray);
 
