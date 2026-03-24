@@ -43,6 +43,10 @@ public class CompositeSensitiveMaskerStrategy implements SensitiveMaskerStrategy
             return null;
         }
 
+        if (isPrimitive(payload.getClass())) {
+            return payload;
+        }
+
         for (final var sensitiveMasker : sensitiveMaskerStrategies) {
             if (sensitiveMasker.supports(payload)) {
                 return sensitiveMasker.mask(payload, context);
