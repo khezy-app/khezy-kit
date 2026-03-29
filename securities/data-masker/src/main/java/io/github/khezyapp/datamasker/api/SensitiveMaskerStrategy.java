@@ -1,9 +1,13 @@
 package io.github.khezyapp.datamasker.api;
 
 
+import java.net.URI;
+import java.net.URL;
+import java.time.temporal.Temporal;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Strategy interface for masking sensitive data within different types of payloads.
@@ -53,6 +57,11 @@ public interface SensitiveMaskerStrategy {
                 Float.class.isAssignableFrom(clz) ||
                 Character.class.isAssignableFrom(clz) ||
                 Number.class.isAssignableFrom(clz) ||
-                String.class.isAssignableFrom(clz);
+                String.class.isAssignableFrom(clz) ||
+                Enum.class.isAssignableFrom(clz) ||
+                UUID.class.isAssignableFrom(clz) ||
+                Temporal.class.isAssignableFrom(clz) ||
+                URL.class.isAssignableFrom(clz) ||
+                URI.class.isAssignableFrom(clz);
     }
 }
