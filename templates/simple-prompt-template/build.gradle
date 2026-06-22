@@ -1,0 +1,13 @@
+plugins {
+    id("khezy.java-library")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'Simple Prompt Template'
+        description = 'A lightweight prompt template engine with shell-like argument substitution ($1, $2, $ARGUMENTS) and inline shell command execution (!`command`) for Java 17+. Includes a plugin SPI, escape/unescape support, and security controls with a configurable blocklist and timeout.'
+    }
+}
