@@ -18,3 +18,5 @@ includeBuild("utils/dynamic-object")
 includeBuild("utils/clone-util")
 
 includeBuild("securities/data-masker")
+
+includeBuild("templates/simple-prompt-template")
