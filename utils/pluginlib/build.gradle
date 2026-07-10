@@ -1,0 +1,17 @@
+plugins {
+    id("khezy.java-library")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'Plugin Lib'
+        description = """
+        A generic Java plugin discovery, loading, and classloader isolation library. \
+        Supports any user-defined SPI type with ServiceLoader and directory-based \
+        JAR scanning, parent-last classloading, lazy/eager instantiation, version-aware \
+        multi-version coexistence, and optional persistence via PluginStore."""
+    }
+}
