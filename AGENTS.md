@@ -2,7 +2,7 @@
 
 ## Project structure
 
-Multi-module Gradle **composite build** (7 independent Gradle builds wired via root `settings.gradle`). Each module has its own `settings.gradle`, `build.gradle`, and version.
+Multi-module Gradle **composite build** (8 independent Gradle builds wired via root `settings.gradle`). Each module has its own `settings.gradle`, `build.gradle`, and version.
 
 | Module | Path | Maven coordinate | Version |
 |---|---|---|---|
@@ -13,6 +13,7 @@ Multi-module Gradle **composite build** (7 independent Gradle builds wired via r
 | clone-util | `utils/clone-util` | `io.github.khezyapp:clone-util` | `1.0.0` |
 | data-masker | `securities/data-masker` | `io.github.khezyapp:data-masker` | `1.0.2` |
 | simple-prompt-template | `templates/simple-prompt-template` | `io.github.khezyapp:simple-prompt-template` | `1.0.0` |
+| pluginlib | `utils/pluginlib` | `io.github.khezyapp:pluginlib` | `1.0.0` |
 
 ## Build system
 
@@ -39,6 +40,9 @@ Multi-module Gradle **composite build** (7 independent Gradle builds wired via r
 # JMH benchmarks (dynamic-object only)
 ./gradlew :dynamic-object:jmh
 
+# Build + test + checkstyle a single module
+./gradlew :pluginlib:build
+
 # Release to Maven Central (manual CI only — see .github/workflows/manual_release.yml)
 ```
 
@@ -61,3 +65,26 @@ Multi-module Gradle **composite build** (7 independent Gradle builds wired via r
 ## CI
 
 Single workflow: `.github/workflows/manual_release.yml` — manual Maven Central release only. No CI runs on push/PR.
+
+## OpenCode customization
+
+This project has custom OpenCode artifacts to reduce re-exploration across sessions.
+
+### Skills (loaded via `skill()` tool)
+
+| Skill | Location | What it contains |
+|---|---|---|
+| `khezy-coding-style` | `.opencode/skills/khezy-coding-style/SKILL.md` | Java conventions (final var, final params, records, Egyptian braces), build system, module layout, test style |
+| `customize-opencode` | built-in | Editing opencode.json, skills, commands, agents, MCP servers, permissions |
+
+### Slash commands (run via `/name` in TUI)
+
+| Command | Location | What it does |
+|---|---|---|
+| `/learn` | `.opencode/commands/learn.md` | At session end, extracts learnings into skills, commands, or AGENTS.md updates |
+
+### How to extend
+
+- **New skill**: create `.opencode/skills/<name>/SKILL.md` with YAML frontmatter (name, description required). Restart OpenCode to discover.
+- **New command**: create `.opencode/commands/<name>.md` with YAML frontmatter (description required). Available immediately.
+- Use `/learn` at session end to capture new knowledge automatically.
