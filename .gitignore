@@ -37,3 +37,4 @@ out/
 .vscode/
 
 .agent-plan
+.agent-output

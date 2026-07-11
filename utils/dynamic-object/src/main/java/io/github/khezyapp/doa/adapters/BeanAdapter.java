@@ -101,6 +101,19 @@ public class BeanAdapter implements TypeAdapter {
         }
     }
 
+    /**
+     * Removes a property from a Java Bean by setting its value to {@code null}.
+     *
+     * @param target   the POJO instance
+     * @param property the name of the property to remove
+     * @return the target object
+     */
+    @Override
+    public Object removeValue(final Object target,
+                              final String property) {
+        return setValue(target, property, null);
+    }
+
     private boolean isMap(final Object target) {
         return target instanceof Map;
     }

@@ -100,6 +100,20 @@ public class RecordAdapter implements TypeAdapter {
     }
 
     /**
+     * "Removes" a property from a Record by creating a new instance with {@code null}
+     * for the specified component.
+     *
+     * @param target   the original record instance
+     * @param property the name of the component to remove
+     * @return a new record instance with the component set to null
+     */
+    @Override
+    public Object removeValue(final Object target,
+                              final String property) {
+        return setValue(target, property, null);
+    }
+
+    /**
      * Inner metadata class used to cache reflection components of a Record.
      */
     public static class RecordMeta {

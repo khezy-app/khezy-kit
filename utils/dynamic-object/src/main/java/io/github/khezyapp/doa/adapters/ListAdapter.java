@@ -60,4 +60,23 @@ public class ListAdapter implements CollectionTypeAdapter {
         list.set(index, value);
         return target;
     }
+
+    /**
+     * Removes an element from the list at the specified index.
+     *
+     * @param target the list instance
+     * @param index  the zero-based index of the element to remove
+     * @return the updated list, or null if the index is out of bounds
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public Object removeValue(final Object target,
+                              final int index) {
+        final var list = (List<Object>) target;
+        if (index >= list.size()) {
+            return null;
+        }
+        list.remove(index);
+        return target;
+    }
 }
