@@ -29,4 +29,16 @@ public interface CollectionTypeAdapter {
      * @return The resulting object (the original target or a new instance if immutable).
      */
     Object setValue(Object target, int index, Object value);
+
+    /**
+     * Removes an element at the given index from the collection.
+     * <p>
+     * For mutable collections like {@code List}, this removes the element and shifts
+     * subsequent elements. For immutable types, returns a new instance without the element.
+     * </p>
+     * @param target The collection to modify.
+     * @param index  The index of the element to remove.
+     * @return The resulting collection, or {@code null} if index is out of bounds.
+     */
+    Object removeValue(Object target, int index);
 }

@@ -197,4 +197,136 @@ class DynamicObjectsTest {
             );
         }
     }
+
+    @Nested
+    @DisplayName("Remove Operations")
+    class RemoveTests {
+
+        @Test
+        @DisplayName("testRemoveSimpleMapKey: Should remove a top-level key from a Map")
+        void testRemoveSimpleMapKey() {
+            final var data = new HashMap<String, Object>();
+            data.put("name", "Alice");
+            data.put("age", 30);
+
+            DynamicObjects.remove(data, "name");
+
+            assertFalse(data.containsKey("name"));
+            assertEquals(30, data.get("age"));
+        }
+
+        @Test
+        @DisplayName("testRemoveNestedMapKey: Should remove a key from a nested Map")
+        void testRemoveNestedMapKey() {
+            final var root = new HashMap<String, Object>();
+            final var config = new HashMap<String, Object>();
+            config.put("debug", true);
+            config.put("port", 8080);
+            root.put("config", config);
+
+            DynamicObjects.remove(root, "config.debug");
+
+            assertFalse(config.containsKey("debug"));
+            assertEquals(8080, config.get("port"));
+        }
+
+        @Test
+        @DisplayName("testRemoveReturnsRemovedValue: Should return the modified target")
+        void testRemoveReturnsRemovedValue() {
+            final var data = new HashMap<String, Object>();
+            data.put("key", "value");
+
+            final var result = DynamicObjects.remove(data, "key");
+
+            assertSame(data, result);
+            assertFalse(data.containsKey("key"));
+        }
+
+        @Test
+        @DisplayName("testRemoveNonExistentKey: Should return target and not throw")
+        void testRemoveNonExistentKey() {
+            final var data = new HashMap<String, Object>();
+            data.put("existing", "data");
+
+            final var result = DynamicObjects.remove(data, "nonexistent");
+
+            assertSame(data, result);
+            assertEquals("data", data.get("existing"));
+        }
+
+        @Test
+        @DisplayName("testRemoveFromMapInsideList: Should remove key from Map inside a List")
+        void testRemoveFromMapInsideList() {
+            final var root = new HashMap<String, Object>();
+            final var items = new ArrayList<HashMap<String, Object>>();
+            final var item = new HashMap<String, Object>();
+            item.put("id", 1);
+            item.put("name", "Widget");
+            items.add(item);
+            root.put("items", items);
+
+            DynamicObjects.remove(root, "items[0].name");
+
+            assertFalse(item.containsKey("name"));
+            assertEquals(1, item.get("id"));
+        }
+
+        @Test
+        @DisplayName("testRemoveDeepNestedMap: Should remove at deep path and keep intermediate maps")
+        void testRemoveDeepNestedMap() {
+            final var root = new HashMap<String, Object>();
+            DynamicObjects.set(root, "a.b.c.d", "deep");
+
+            DynamicObjects.remove(root, "a.b.c.d");
+
+            assertNotNull(root.get("a"));
+            assertNotNull(((HashMap<?, ?>) root.get("a")).get("b"));
+            assertNotNull(((HashMap<?, ?>) ((HashMap<?, ?>) root.get("a")).get("b")).get("c"));
+            final var c = (HashMap<?, ?>) ((HashMap<?, ?>) ((HashMap<?, ?>) root.get("a")).get("b")).get("c");
+            assertFalse(c.containsKey("d"));
+        }
+
+        @Test
+        @DisplayName("testRemoveWithSafeAccess: Should not throw on broken path with safe access")
+        void testRemoveWithSafeAccess() {
+            final var data = new HashMap<String, Object>();
+
+            assertDoesNotThrow(() -> DynamicObjects.remove(data, "nonexistent.path?"));
+        }
+
+        @Test
+        @DisplayName("testRemoveBeanProperty: Should set POJO property to null")
+        void testRemoveBeanProperty() {
+            final var profile = new UserProfile();
+            profile.setUsername("Alice");
+
+            DynamicObjects.remove(profile, "username");
+
+            assertNull(profile.getUsername());
+        }
+
+        @Test
+        @DisplayName("testRemoveRecordComponent: Should return new record with null component")
+        void testRemoveRecordComponent() {
+            final var original = new AccountRecord("ACC-01", 100);
+
+            final var updated = (AccountRecord) DynamicObjects.remove(original, "id");
+
+            assertNotSame(original, updated);
+            assertNull(updated.id());
+            assertEquals(100, updated.balance());
+        }
+
+        @Test
+        @DisplayName("testRemoveListElement: Should remove element at index from List")
+        void testRemoveListElement() {
+            final var list = new ArrayList<>(Arrays.asList("a", "b", "c"));
+
+            DynamicObjects.remove(list, "[1]");
+
+            assertEquals(2, list.size());
+            assertEquals("a", list.get(0));
+            assertEquals("c", list.get(1));
+        }
+    }
 }

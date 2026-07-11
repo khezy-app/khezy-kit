@@ -29,4 +29,17 @@ public interface TypeAdapter {
      * @return The resulting object (the original target or a new instance if immutable).
      */
     Object setValue(Object target, String property, Object value);
+
+    /**
+     * Removes a property from the target.
+     * <p>
+     * For Maps, this removes the key entirely. For POJOs and Records,
+     * this sets the property to {@code null} (or the type's default value).
+     * </p>
+     * @param target   The object to modify.
+     * @param property The property name to remove.
+     * @return The resulting object (the original target or a new instance if immutable),
+     *         or {@code null} if removal is not supported for this type.
+     */
+    Object removeValue(Object target, String property);
 }

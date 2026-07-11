@@ -73,4 +73,21 @@ public final class DynamicObjects {
                              final Object value) {
         return OBJECT_ACCESSOR.set(target, path, value);
     }
+
+    /**
+     * Removes a property or element at the specified path within an object graph.
+     * <p>
+     * For Maps, the key is removed entirely. For Collections, the element is removed
+     * by index. For POJOs and Records, the property is set to {@code null}.
+     * For immutable types like Java Records, this returns a new instance.
+     * </p>
+     *
+     * @param target the root object
+     * @param path   the property path to remove
+     * @return the modified object or a new instance (in the case of Records)
+     */
+    public static Object remove(final Object target,
+                                final String path) {
+        return OBJECT_ACCESSOR.remove(target, path);
+    }
 }

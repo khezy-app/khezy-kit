@@ -29,4 +29,17 @@ public interface ObjectAccessor {
      * @return The updated object (either the same instance or a new one for immutables).
      */
     Object set(Object target, String path, Object value);
+
+    /**
+     * Removes a property or element at the specified path.
+     * <p>
+     * For Maps, the key is removed. For Collections, the element is removed by index.
+     * For POJOs and Records, the property is set to {@code null} (or the type's default).
+     * For immutable types (Records), a new instance is returned.
+     *
+     * @param target The root object to modify.
+     * @param path   The string path to the property to remove.
+     * @return The modified object (either the same instance or a new one for immutables).
+     */
+    Object remove(Object target, String path);
 }

@@ -32,6 +32,12 @@ public class CompositeTypeAdapter implements TypeAdapter {
         return getDelegate(target).setValue(target, property, value);
     }
 
+    @Override
+    public Object removeValue(final Object target,
+                              final String property) {
+        return getDelegate(target).removeValue(target, property);
+    }
+
     private TypeAdapter getDelegate(final Object target) {
         final var clzName = target.getClass().getName();
         return adapterCache.get(clzName, clz ->

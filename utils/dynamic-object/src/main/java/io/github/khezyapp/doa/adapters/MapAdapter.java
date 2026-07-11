@@ -52,6 +52,20 @@ public class MapAdapter implements TypeAdapter {
         return target;
     }
 
+    /**
+     * Removes a key from the map.
+     *
+     * @param target   the map instance
+     * @param property the key to remove
+     * @return the target map
+     */
+    @Override
+    public Object removeValue(final Object target,
+                              final String property) {
+        cast(target).remove(property);
+        return target;
+    }
+
     @SuppressWarnings("unchecked")
     private Map<String, Object> cast(final Object value) {
         return (Map<String, Object>) value;

@@ -100,6 +100,51 @@ public class DefaultObjectAccessor implements ObjectAccessor {
         return setRecursive(target, tokens, 0, value);
     }
 
+    /**
+     * Removes a property or element at the specified path within the target object.
+     * <p>
+     * Navigates to the parent of the target property, then delegates removal
+     * to the appropriate adapter. For Maps, the key is removed. For Collections,
+     * the element is removed by index. For POJOs and Records, the property is
+     * set to {@code null}.
+     * </p>
+     *
+     * @param target the root object
+     * @param path   the string path to the property to remove
+     * @return the modified target object (or a new instance if immutable)
+     */
+    @Override
+    public Object remove(final Object target,
+                         final String path) {
+        final var tokens = parser.parse(path);
+        if (tokens.isEmpty()) {
+            return target;
+        }
+        var current = target;
+        for (var i = 0; i < tokens.size() - 1; i++) {
+            if (Objects.isNull(current)) {
+                return target;
+            }
+            final var token = tokens.get(i);
+            if (token instanceof PropertyToken propToken) {
+                current = getProperty(current, propToken.name());
+            } else if (token instanceof IndexToken indexToken) {
+                current = getProperty(current, indexToken.index());
+            }
+        }
+        if (Objects.isNull(current)) {
+            return target;
+        }
+        final var lastToken = tokens.get(tokens.size() - 1);
+        if (lastToken instanceof PropertyToken propToken) {
+            return adapters.removeValue(current, propToken.name());
+        }
+        if (lastToken instanceof IndexToken indexToken) {
+            return collectionTypeAdapter.removeValue(current, indexToken.index());
+        }
+        throw new IllegalArgumentException("Invalid token: " + lastToken);
+    }
+
     @SuppressWarnings("unchecked")
     private Object setRecursive(final Object pcurrent,
                                 final List<PathToken> tokens,
