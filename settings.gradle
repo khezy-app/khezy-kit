@@ -10,6 +10,8 @@ dependencyResolutionManagement {
 
 rootProject.name = 'khezy-kit'
 
+includeBuild("core/state-machine-core")
+
 includeBuild("storage/storage-api")
 includeBuild("storage/storage-fs")
 

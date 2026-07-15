@@ -111,7 +111,8 @@ rootProject.name = "<module-name>"
 - No JSR-305 annotations (`@Nullable`/`@NonNull`)
 - `Objects.requireNonNull(value, "message")` for parameter validation
 - `Optional` for return types that may be empty
-- `Objects.isNull` / `Objects.nonNull` for conditional checks
+- **Prefer `Objects.isNull(..)` and `Objects.nonNull(..)`** over `== null` / `!= null` for consistency
+- Examples: `Objects.isNull(transition)`, `Objects.nonNull(transition.guard())`
 
 ### Annotations
 - Single annotation per line
@@ -168,3 +169,87 @@ rootProject.name = "<module-name>"
 - Helper classes as static inner classes in test file
 - Helper methods: `private static`
 - Helper providers: `static Stream<Arguments> xxxProvider()`
+
+## Test data naming
+
+When writing test examples or sample data, use **Khmer names** and **Cambodia locations** to reflect the project's local context:
+
+| Category | Preferred examples |
+|---|---|
+| Person names | `SOK`, `SAO`, `VISAL`, `CHAMPA`, `RATH`, `SREYNEANG`, `VANN`, `KIMLENG` |
+| Places | `Battambang`, `Phnom Penh`, `Siem Reap`, `Kampot`, `Sihanoukville` |
+
+Examples:
+```java
+final var ctx = new KycContext("SOK", "Battambang", "1995-05-20", null);
+
+final var user = new User("VISAL", "visal@example.com", "Phnom Penh");
+```
+
+## Java gotchas
+
+### Interfaces with multiple default methods are not `@FunctionalInterface`
+An interface with 2+ abstract or default methods cannot be used as a lambda target. Example:
+```java
+// StateMachineInterceptor has 2 default methods — must use anonymous class, NOT lambda
+machine.addInterceptor(new StateMachineInterceptor<String, String, Void>() {
+    @Override
+    public boolean preTransition(final String s, final String t, final Event<String, ?> e, final Void c) {
+        return false;
+    }
+});
+// This does NOT compile:
+// machine.addInterceptor((s, t, e, c) -> false);
+```
+
+### Inner records inside generic classes cannot access enclosing type parameters
+Records declared as inner members are implicitly `static` and cannot reference the outer class's type variables:
+```java
+// DOES NOT COMPILE — `S` and `E` are from the outer class
+class Outer<S, E> {
+    private record Inner(S source, E event) { }
+}
+// Fix: lift the record out of the class, or pass type params explicitly
+```
+
+### `finalState()` auto-registers the state
+The builder's `finalState(id)` calls `states.put(id, State.of(id))` internally. This means the `FinalStateNotFound` validation rule can never trigger during normal usage — it's kept only as a defensive check.
+
+## FSM testing patterns (state-machine-core)
+
+### KYC workflow as canonical end-to-end test
+Use this as the standard integration test template:
+```
+DRAFT ──submit──► INFO_COLLECTED ──validate──► VALIDATING ──pass──► APPROVED
+                       │                            │
+                       │                            └──fail──► REJECTED
+                       │
+                       └──revision──► DRAFT
+```
+Context record: `KycContext(String name, String placeOfBirth, String dateOfBirth, String decision)`
+Guard: submit requires `name != null && !name.isBlank()`
+
+### Action execution order
+Actions fire in sequence: `exit → transition → entry`. Verify with a shared `List<String>` log:
+```java
+actionLog.add("exit:DRAFT");
+actionLog.add("transition:submit");
+actionLog.add("entry:INFO_COLLECTED");
+```
+
+### Testing fire() silent scenarios (state unchanged)
+These three return currentState without throwing:
+- Event fired in a final state
+- Null event
+- Event with no matching transition from current state
+
+All three also call `listener.onError()` — verify with a listener on the machine.
+
+### Interceptor testing
+- `preTransition` returning `false` → state unchanged, `onError` fires
+- `false` on first interceptor → second interceptor's `preTransition` is never called
+- Use anonymous class (not lambda) since `StateMachineInterceptor` is not `@FunctionalInterface`
+
+### Exception testing
+- Action failure → `TransitionExecutionException` with `getSourceState()`, `getEventType()`, `getTargetState()`
+- State remains at old state after exception (no rollback)
