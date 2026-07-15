@@ -1,0 +1,17 @@
+plugins {
+    id("khezy.java-library")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'Finite State Machine Core'
+        description = """
+        A lightweight, zero-dependency Java library for building and executing finite state machines (FSM). 
+        It features a generic type system with type-safe state, event, and context parameters, 
+        a fluent builder API, thread-safe execution with listener and interceptor hooks, 
+        and O(1) transition lookup."""
+    }
+}

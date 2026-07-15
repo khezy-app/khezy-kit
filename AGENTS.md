@@ -5,7 +5,8 @@
 Multi-module Gradle **composite build** (8 independent Gradle builds wired via root `settings.gradle`). Each module has its own `settings.gradle`, `build.gradle`, and version.
 
 | Module | Path | Maven coordinate | Version |
-|---|---|---|---|
+|---|---|---|---|---|
+| state-machine-core | `core/state-machine-core` | `io.github.khezyapp:state-machine-core` | `1.0.0` |
 | storage-api | `storage/storage-api` | `io.github.khezyapp:storage-api` | `1.0.0-SNAPSHOT` |
 | storage-fs | `storage/storage-fs` | `io.github.khezyapp:storage-fs` | `1.0.0-SNAPSHOT` |
 | string-util | `utils/string-util` | `io.github.khezyapp:string-util` | `1.0.0` |
@@ -43,12 +44,15 @@ Multi-module Gradle **composite build** (8 independent Gradle builds wired via r
 # Build + test + checkstyle a single module
 ./gradlew :pluginlib:build
 
+# Build + test + checkstyle the state machine core
+./gradlew :state-machine-core:build
+
 # Release to Maven Central (manual CI only — see .github/workflows/manual_release.yml)
 ```
 
 ## Key conventions
 
-- Package base: `io.github.khezyapp.<module-prefix>` (e.g. `io.github.khezyapp.doa`, `io.github.khezyapp.datamasker`, `io.github.khezyapp.clone`)
+- Package base: `io.github.khezyapp.<module-prefix>` (e.g. `io.github.khezyapp.doa`, `io.github.khezyapp.datamasker`, `io.github.khezyapp.clone`, `io.github.khezyapp.fsm.core` for state-machine-core)
 - Each module declares its own `group` and `version` in `build.gradle` (or `gradle.properties` for storage modules)
 - Storage modules (`storage-api`, `storage-fs`) are still `1.0.0-SNAPSHOT` (pre-release); all others are published releases
 - Modules that use Lombok set `compileOnly` extends `annotationProcessor` via convention plugin; no manual lombok config needed
@@ -88,3 +92,16 @@ This project has custom OpenCode artifacts to reduce re-exploration across sessi
 - **New skill**: create `.opencode/skills/<name>/SKILL.md` with YAML frontmatter (name, description required). Restart OpenCode to discover.
 - **New command**: create `.opencode/commands/<name>.md` with YAML frontmatter (description required). Available immediately.
 - Use `/learn` at session end to capture new knowledge automatically.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

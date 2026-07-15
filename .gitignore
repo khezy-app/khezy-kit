@@ -38,3 +38,7 @@ out/
 
 .agent-plan
 .agent-output
+
+# Graphify
+graphify-out/**
+!graphify-out/GRAPH_REPORT.md
