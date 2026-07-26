@@ -253,3 +253,4 @@ All three also call `listener.onError()` — verify with a listener on the machi
 ### Exception testing
 - Action failure → `TransitionExecutionException` with `getSourceState()`, `getEventType()`, `getTargetState()`
 - State remains at old state after exception (no rollback)
+

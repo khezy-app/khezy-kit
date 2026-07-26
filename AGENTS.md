@@ -2,7 +2,7 @@
 
 ## Project structure
 
-Multi-module Gradle **composite build** (8 independent Gradle builds wired via root `settings.gradle`). Each module has its own `settings.gradle`, `build.gradle`, and version.
+Multi-module Gradle **composite build** (10 independent Gradle builds wired via root `settings.gradle`). Each module has its own `settings.gradle`, `build.gradle`, and version.
 
 | Module | Path | Maven coordinate | Version |
 |---|---|---|---|---|
@@ -15,6 +15,7 @@ Multi-module Gradle **composite build** (8 independent Gradle builds wired via r
 | data-masker | `securities/data-masker` | `io.github.khezyapp:data-masker` | `1.0.2` |
 | simple-prompt-template | `templates/simple-prompt-template` | `io.github.khezyapp:simple-prompt-template` | `1.0.0` |
 | pluginlib | `utils/pluginlib` | `io.github.khezyapp:pluginlib` | `1.0.0` |
+| ast-expression-core | `core/ast-expression-core` | `io.github.khezyapp:ast-expression-core` | `1.0.0` |
 
 ## Build system
 
@@ -46,6 +47,15 @@ Multi-module Gradle **composite build** (8 independent Gradle builds wired via r
 
 # Build + test + checkstyle the state machine core
 ./gradlew :state-machine-core:build
+
+# Build + test + checkstyle ast-expression-core
+./gradlew :ast-expression-core:build
+
+# Checkstyle only (ast-expression-core)
+./gradlew :ast-expression-core:checkstyleMain
+
+# Test only (ast-expression-core)
+./gradlew :ast-expression-core:test
 
 # Release to Maven Central (manual CI only — see .github/workflows/manual_release.yml)
 ```
@@ -79,6 +89,8 @@ This project has custom OpenCode artifacts to reduce re-exploration across sessi
 | Skill | Location | What it contains |
 |---|---|---|
 | `khezy-coding-style` | `.opencode/skills/khezy-coding-style/SKILL.md` | Java conventions (final var, final params, records, Egyptian braces), build system, module layout, test style |
+| `khezy-checkstyle-gotchas` | `.opencode/skills/khezy-checkstyle-gotchas/SKILL.md` | Checkstyle rules that cause recurring violations: LeftCurly expansion, WhitespaceAround `{ }`, MethodLength 150, FinalParameters, FinalLocalVariable, UnusedImports |
+| `khezy-ast-evaluator-testing` | `.opencode/skills/khezy-ast-evaluator-testing/SKILL.md` | ast-expression-core evaluator test patterns: anonymous stubs (no Mockito), custom registration, dry-run setup, List.copyOf null gotcha, cache ordering |
 | `customize-opencode` | built-in | Editing opencode.json, skills, commands, agents, MCP servers, permissions |
 
 ### Slash commands (run via `/name` in TUI)

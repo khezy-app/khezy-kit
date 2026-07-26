@@ -1,0 +1,25 @@
+plugins {
+    id("khezy.java-library")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'AST Expression Core'
+        description = "Reusable AST expression evaluation library. Provides a generic Node model, pluggable Evaluator registry, recursive evaluation engine with tracing, rich builtin evaluators (arithmetic, boolean, string, date, list, coalesce), SQL data-access layer with jOOQ dialect support, and dynamic index detection from AST queries."
+    }
+}
+
+ext {
+    jooqVersion = "3.21.6"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-Xlint:-processing")
+}
+
+dependencies {
+    api "org.jooq:jooq:${jooqVersion}"
+}
