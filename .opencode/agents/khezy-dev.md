@@ -5,7 +5,6 @@ description: >-
   into reusable, simple-and-easy library blocks. Expert in JVM internals, Gradle,
   and API design. Drives by the KHEZY mission: make technical excellence simple.
 mode: subagent
-model: deepseek/deepseek-v4-flash
 
 permission:
   read: allow

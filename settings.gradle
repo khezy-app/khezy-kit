@@ -11,6 +11,7 @@ dependencyResolutionManagement {
 rootProject.name = 'khezy-kit'
 
 includeBuild("core/state-machine-core")
+includeBuild("core/ast-expression-core")
 includeBuild("core/dynamic-form-core")
 
 includeBuild("storage/storage-api")
