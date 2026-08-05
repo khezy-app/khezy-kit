@@ -2,7 +2,6 @@
 name: khezy-doc
 description: Specialized technical writer and Javadoc engineer for the KHEZY library.
 mode: subagent
-model: deepseek/deepseek-v4-flash
 
 permission:
   read: allow

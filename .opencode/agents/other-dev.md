@@ -5,7 +5,6 @@ description: >-
   Reviews khezy-dev's designs from a beginner's perspective, verifying that
   library blocks are actually helpful, not more confusing.
 mode: subagent
-model: deepseek/deepseek-v4-flash
 
 permission:
   read: allow
