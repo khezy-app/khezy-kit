@@ -1,0 +1,22 @@
+plugins {
+    id("khezy.java-library")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+dependencies {
+    compileOnly "com.fasterxml.jackson.core:jackson-annotations:2.18.2"
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:2.18.2"
+}
+
+mavenPublishing {
+    pom {
+        name = 'Dynamic Form Core'
+        description = """
+        A pure, storage-agnostic Java core library for dynamic form configuration. It models a form as a
+        versioned graph of interdependent field contracts (schema as data) and resolves it through one
+        stateless, side-effect-free engine: conditional visibility, always-applied defaults, coercion,
+        validation, dynamic options, repeatable collections, file uploads, and conditional-required."""
+    }
+}
