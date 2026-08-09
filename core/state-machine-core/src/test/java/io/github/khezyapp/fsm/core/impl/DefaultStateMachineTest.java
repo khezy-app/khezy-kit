@@ -298,4 +298,154 @@ class DefaultStateMachineTest {
 
         assertEquals("executed", captured.get());
     }
+
+    @Test
+    @DisplayName("Should select first candidate whose guard returns true")
+    void testFirstTrueGuardWins() throws StateMachineBuilderException {
+        final var m = StateMachineBuilder.<String, String, String>builder()
+            .initialState("route")
+            .state("route")
+            .state("approved")
+            .state("rejected")
+            .state("revision")
+            .transition("to-approved", "route", "approved", "respond")
+                .guard(ctx -> "approved".equals(ctx))
+            .and()
+            .transition("to-rejected", "route", "rejected", "respond")
+                .guard(ctx -> "rejected".equals(ctx))
+            .and()
+            .transition("to-revision", "route", "revision", "respond")
+                .guard(ctx -> "revision".equals(ctx))
+            .and()
+            .build();
+
+        m.fire(Event.of("respond"), "rejected");
+
+        assertEquals("rejected", m.getCurrentState().id());
+        assertEquals("to-rejected", m.getLastTransition().orElseThrow().id());
+    }
+
+    @Test
+    @DisplayName("Should use guard-less fallback when no guard passes")
+    void testGuardlessFallbackSelected() throws StateMachineBuilderException {
+        final var m = StateMachineBuilder.<String, String, String>builder()
+            .initialState("route")
+            .state("route")
+            .state("known")
+            .state("unknown")
+            .transition("known", "route", "known", "check")
+                .guard(ctx -> "known".equals(ctx))
+            .and()
+            .transition("fallback", "route", "unknown", "check")
+            .and()
+            .build();
+
+        m.fire(Event.of("check"), "other");
+
+        assertEquals("unknown", m.getCurrentState().id());
+        assertEquals("fallback", m.getLastTransition().orElseThrow().id());
+    }
+
+    @Test
+    @DisplayName("Should stay unchanged and notify onError when no guard passes")
+    void testNoGuardPasses() throws StateMachineBuilderException {
+        final var captured = new AtomicReference<Boolean>();
+        final var m = StateMachineBuilder.<String, String, String>builder()
+            .initialState("route")
+            .state("route")
+            .state("known")
+            .state("unknown")
+            .transition("known", "route", "known", "check")
+                .guard(ctx -> "known".equals(ctx))
+            .and()
+            .transition("unknown", "route", "unknown", "check")
+                .guard(ctx -> "unknown".equals(ctx))
+            .and()
+            .build();
+        m.addListener(new StateMachineListener<String, String>() {
+            @Override
+            public void onError(final String state, final Event<String, ?> event, final Exception e) {
+                captured.set(true);
+            }
+        });
+
+        m.fire(Event.of("check"), "other");
+
+        assertEquals("route", m.getCurrentState().id());
+        assertEquals(Boolean.TRUE, captured.get());
+        assertTrue(m.getLastTransition().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should stay unchanged with empty last transition when no candidate exists")
+    void testNoCandidateExists() {
+        machine.fire(Event.of("nothing"), new StringBuilder());
+
+        assertEquals("A", machine.getCurrentState().id());
+        assertTrue(machine.getLastTransition().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should only execute the winning transition's actions")
+    void testOnlyWinnerActionsRun() throws StateMachineBuilderException {
+        final var log = new ArrayList<String>();
+        final var m = StateMachineBuilder.<String, String, String>builder()
+            .initialState("route")
+            .state("route")
+            .state("known")
+            .state("unknown")
+            .transition("known", "route", "known", "check")
+                .guard(ctx -> "known".equals(ctx))
+                .action(ctx -> log.add("known-action"))
+            .and()
+            .transition("unknown", "route", "unknown", "check")
+                .guard(ctx -> "unknown".equals(ctx))
+                .action(ctx -> log.add("unknown-action"))
+            .and()
+            .build();
+
+        m.fire(Event.of("check"), "unknown");
+
+        assertEquals(List.of("unknown-action"), log);
+    }
+
+    @Test
+    @DisplayName("Should expose winning transition via getLastTransition")
+    void testGetLastTransitionReturnsWinner() throws StateMachineBuilderException {
+        final var m = StateMachineBuilder.<String, String, String>builder()
+            .initialState("route")
+            .state("route")
+            .state("known")
+            .state("unknown")
+            .transition("known", "route", "known", "check")
+                .guard(ctx -> "known".equals(ctx))
+            .and()
+            .transition("unknown", "route", "unknown", "check")
+            .and()
+            .build();
+
+        m.fire(Event.of("check"), "known");
+
+        assertEquals("known", m.getLastTransition().orElseThrow().id());
+    }
+
+    @Test
+    @DisplayName("Should leave last transition empty when firing in a final state")
+    void testLastTransitionEmptyInFinalState() throws StateMachineBuilderException {
+        final var m = StateMachineBuilder.<String, String, String>builder()
+            .initialState("A")
+            .state("A")
+            .finalState("B")
+            .transition("t1", "A", "B", "go")
+            .and()
+            .build();
+
+        m.fire(Event.of("go"), "x");
+        assertTrue(m.isFinal());
+        assertEquals("t1", m.getLastTransition().orElseThrow().id());
+
+        m.fire(Event.of("go"), "x");
+
+        assertTrue(m.getLastTransition().isEmpty());
+    }
 }

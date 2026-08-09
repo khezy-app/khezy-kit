@@ -28,14 +28,14 @@ No annotations, no code generation, no XML config. Just a fluent builder and a s
 <dependency>
     <groupId>io.github.khezyapp</groupId>
     <artifactId>state-machine-core</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-implementation 'io.github.khezyapp:state-machine-core:1.0.0'
+implementation 'io.github.khezyapp:state-machine-core:1.1.0'
 ```
 
 ## Example Usage
@@ -135,23 +135,75 @@ machine = StateMachineBuilder.<String, String, KycContext>builder()
     .build();
 ```
 
+## Guard-Driven Branching (CHOICE)
+
+Since `1.1.0`, a single event can route to **different target states** based on context. Register several transitions for the same `(source, event)` pair — each with a guard. At `fire()` time the machine picks the **first candidate whose guard returns `true`** (definition order). A trailing guard-less transition acts as a deterministic fallback (`else`).
+
+```java
+record KycContext(String decision) {}
+
+StateMachine<String, String, KycContext> machine =
+    StateMachineBuilder.<String, String, KycContext>builder()
+        .initialState("manual_review")
+        .state("manual_review")
+        .state("revision")
+        .finalState("approved")
+        .finalState("rejected")
+
+        .transition("to-approved", "manual_review", "approved", "KYC_RESPONSE_RECEIVED")
+            .guard(ctx -> "approved".equals(ctx.decision()))
+        .and()
+        .transition("to-rejected", "manual_review", "rejected", "KYC_RESPONSE_RECEIVED")
+            .guard(ctx -> "rejected".equals(ctx.decision()))
+        .and()
+        .transition("to-revision", "manual_review", "revision", "KYC_RESPONSE_RECEIVED")
+            .guard(ctx -> "revision".equals(ctx.decision()))
+        .and()
+        .build();
+
+machine.fire(Event.of("KYC_RESPONSE_RECEIVED"), new KycContext("approved"));
+machine.getCurrentState().id();                              // "approved"
+machine.getLastTransition().orElseThrow().id();              // "to-approved"
+```
+
+`getLastTransition()` returns the winning transition (`Optional` empty when the last `fire()` was a no-op). Multiple candidates sharing a `(source, event)` pair must have at least one guard; all-guard-less siblings are rejected at build time as `AmbiguousTransition`.
+
+## Resuming a Persisted Machine
+
+Since `1.1.0`, you can rebuild a machine positioned at a saved `currentState` with `resume(...)`, so processing continues from where it left off. The resumed state must be a defined state (else `ResumeStateNotFound` at build time).
+
+```java
+StateMachine<String, String, KycContext> machine =
+    StateMachineBuilder.<String, String, KycContext>builder()
+        .initialState("manual_review")
+        .state("manual_review")
+        .finalState("approved")
+        .transition("approve", "manual_review", "approved", "approve")
+        .and()
+        .resume("manual_review")     // start at the saved state instead of initial
+        .build();
+
+machine.fire(Event.of("approve"), new KycContext("approved"));
+machine.isFinal();                   // true
+```
+
 ## Transition Algorithm
 
-When `fire(event, context)` is called, the machine follows this strict 11-step sequence:
+When `fire(event, context)` is called, the machine follows this strict sequence:
 
 1. **Final state check** — if machine is in a terminal state, ignore the event
 2. **Null event check** — silently ignore null events
-3. **Transition lookup** — O(1) hash lookup by (currentState, eventType)
-4. **Interceptor pre-hooks** — each interceptor can veto the transition
-5. **Guard evaluation** — guard must return `true` for the transition to proceed
+3. **Transition lookup** — O(1) hash lookup returns ordered candidates by (currentState, eventType)
+4. **Guard selection** — pick the first candidate whose guard returns `true` (null guard always matches)
+5. **Interceptor pre-hooks** — each interceptor can veto the selected transition
 6. **Notify `onTransitionStart`** — inform all listeners
 7. **Exit actions** — `onExit` of the source state
-8. **Transition actions** — actions attached to the transition itself
+8. **Transition actions** — actions attached to the selected transition
 9. **State update** — `currentState = target`
 10. **Entry actions** — `onEntry` of the target state
 11. **Post-hooks** — interceptor `postTransition` + listener notifications
 
-If any action throws, the machine catches the exception, notifies listeners via `onError`, and throws a `TransitionExecutionException` carrying the source state, event type, and target state.
+If no candidate's guard passes (or no candidate exists), the event is a no-op: the state is unchanged and listeners receive `onError`. If any action throws, the machine catches the exception, notifies listeners via `onError`, and throws a `TransitionExecutionException` carrying the source state, event type, and target state.
 
 ## Extensibility
 
@@ -225,8 +277,10 @@ The builder checks 7 rules at `build()` time, collecting all violations before t
 | At least one state | `NoStatesDefined` |
 | Transition source exists | `SourceStateNotFound` |
 | Transition target exists | `TargetStateNotFound` |
-| No duplicate (source, event) | `DuplicateTransition` |
+| No duplicate (source, event, target) | `DuplicateTransition` |
 | Final state exists | `FinalStateNotFound` |
+| Guarded branching is deterministic | `AmbiguousTransition` |
+| Resume state is defined | `ResumeStateNotFound` |
 
 ## Module Contents
 

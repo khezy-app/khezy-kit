@@ -42,6 +42,7 @@ import java.util.*;
  */
 public class StateMachineBuilder<S, E, C> {
     private S initialStateId;
+    private S resumeStateId;
     private final Map<S, State<S, C>> states;
     private final Set<S> finalStateIds;
     private final List<Transition<S, E, C>> transitions;
@@ -75,6 +76,24 @@ public class StateMachineBuilder<S, E, C> {
      */
     public StateMachineBuilder<S, E, C> initialState(final S stateId) {
         this.initialStateId = stateId;
+        return this;
+    }
+
+    /**
+     * Positions the built machine at an arbitrary defined state instead of the
+     * initial state.
+     * <p>
+     * Use this to rebuild a persisted machine instance whose {@code currentState}
+     * was saved, so processing can continue from where it left off. The resumed
+     * state must be a defined state or {@link #build()} fails with
+     * {@code ResumeStateNotFound}. The machine still requires an initial state for
+     * the definition; it simply starts positioned at the resumed state.
+     *
+     * @param stateId the identifier of the state to resume at
+     * @return this builder for fluent chaining
+     */
+    public StateMachineBuilder<S, E, C> resume(final S stateId) {
+        this.resumeStateId = stateId;
         return this;
     }
 
@@ -192,8 +211,9 @@ public class StateMachineBuilder<S, E, C> {
         final var finalStates = new HashSet<>(this.finalStateIds);
         final var index = TransitionIndex.create(this.transitions);
         final var initialState = stateMap.get(initialStateId);
+        final var currentState = Objects.nonNull(resumeStateId) ? stateMap.get(resumeStateId) : initialState;
 
-        return new DefaultStateMachine<>(initialState, initialState, stateMap, finalStates, index);
+        return new DefaultStateMachine<>(initialState, currentState, stateMap, finalStates, index);
     }
 
     /**
@@ -218,6 +238,10 @@ public class StateMachineBuilder<S, E, C> {
             }
         }
 
+        if (Objects.nonNull(resumeStateId) && !states.containsKey(resumeStateId)) {
+            violations.add("ResumeStateNotFound: resume state '" + resumeStateId + "' not found in defined states");
+        }
+
         final var transitionKeySet = new HashSet<String>();
         for (final var t : transitions) {
             if (!states.containsKey(t.source())) {
@@ -229,10 +253,35 @@ public class StateMachineBuilder<S, E, C> {
                     + t.target() + "' which is not defined");
             }
 
-            final var key = t.source() + "::" + t.eventType();
+            final var key = t.source() + "::" + t.eventType() + "::" + t.target();
             if (!transitionKeySet.add(key)) {
                 violations.add("DuplicateTransition: duplicate transition for source '" + t.source()
-                    + "' and event '" + t.eventType() + "'");
+                    + "', event '" + t.eventType() + "' and target '" + t.target() + "'");
+            }
+        }
+
+        validateAmbiguousTransitions(violations);
+    }
+
+    /**
+     * Rejects multiple transitions that share a {@code (source, event)} pair when
+     * none of them carries a guard. Guard-less candidates are all always-allowed,
+     * so more than one is ambiguous and would never select deterministically.
+     */
+    private void validateAmbiguousTransitions(final List<String> violations) {
+        final var bySourceAndEvent = new HashMap<String, List<Transition<S, E, C>>>();
+        for (final var t : transitions) {
+            final var key = t.source() + "::" + t.eventType();
+            bySourceAndEvent.computeIfAbsent(key, k -> new ArrayList<>()).add(t);
+        }
+
+        for (final var entry : bySourceAndEvent.entrySet()) {
+            final var candidates = entry.getValue();
+            final boolean allGuardless = candidates.stream().allMatch(t -> Objects.isNull(t.guard()));
+            if (candidates.size() > 1 && allGuardless) {
+                final var first = candidates.get(0);
+                violations.add("AmbiguousTransition: transitions sharing source '" + first.source()
+                    + "' and event '" + first.eventType() + "' must have at least one guard to select a target");
             }
         }
     }

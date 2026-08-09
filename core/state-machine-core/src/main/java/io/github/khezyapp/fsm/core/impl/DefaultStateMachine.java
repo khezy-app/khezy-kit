@@ -12,6 +12,7 @@ import io.github.khezyapp.fsm.core.model.Transition;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -31,9 +32,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <ol>
  *   <li>Check if machine is in a final state — if so, ignore the event</li>
  *   <li>Check for null event — silently ignore</li>
- *   <li>Look up transition by (currentState, event.type) — O(1)</li>
- *   <li>Run interceptor pre-hooks — any interceptor may veto</li>
- *   <li>Evaluate guard — must return true for the transition to proceed</li>
+ *   <li>Look up candidate transitions by (currentState, event.type) — O(1)</li>
+ *   <li>Select the first candidate whose guard passes (null guard always matches)</li>
+ *   <li>Run interceptor pre-hooks on the selected transition — any interceptor may veto</li>
  *   <li>Notify listeners that a transition is starting</li>
  *   <li>Execute exit actions on the source state</li>
  *   <li>Execute transition actions</li>
@@ -59,6 +60,7 @@ public final class DefaultStateMachine<S, E, C> implements StateMachine<S, E, C>
     private final List<StateMachineInterceptor<S, E, C>> interceptors;
 
     private volatile State<S, C> currentState;
+    private volatile Optional<Transition<S, E, C>> lastTransition = Optional.empty();
 
     /**
      * Constructs a new state machine with the given definition.
@@ -90,17 +92,20 @@ public final class DefaultStateMachine<S, E, C> implements StateMachine<S, E, C>
                                           final C context) {
         // Step 1: Final state check — ignore events in terminal states
         if (isFinal()) {
+            lastTransition = Optional.empty();
             return currentState;
         }
 
         // Step 2: Null event guard
         if (Objects.isNull(event)) {
+            lastTransition = Optional.empty();
             return currentState;
         }
 
-        // Step 3: O(1) transition lookup
-        final var transition = transitionIndex.find(currentState.id(), event.type());
-        if (Objects.isNull(transition)) {
+        // Step 3: Find ordered candidate transitions for (currentState, event.type)
+        final var candidates = transitionIndex.findAll(currentState.id(), event.type());
+        if (candidates.isEmpty()) {
+            lastTransition = Optional.empty();
             notifyListenersOnError(currentState, event, new TransitionExecutionException(
                 "No matching transition for event '" + event.type() + "' in state '" + currentState.id() + "'",
                 null,
@@ -109,26 +114,28 @@ public final class DefaultStateMachine<S, E, C> implements StateMachine<S, E, C>
             return currentState;
         }
 
+        // Step 4: Select the first candidate whose guard passes (null guard always matches)
+        final var transition = select(candidates, context);
+        if (Objects.isNull(transition)) {
+            lastTransition = Optional.empty();
+            notifyListenersOnError(currentState, event, new TransitionExecutionException(
+                "No guard passed for event '" + event.type() + "' in state '" + currentState.id() + "'",
+                null,
+                currentState.id(), event.type(), null
+            ));
+            return currentState;
+        }
+        lastTransition = Optional.of(transition);
+
         final var oldState = currentState;
 
-        // Step 4: Interceptor pre-hooks (any may veto)
+        // Step 5: Interceptor pre-hooks (any may veto)
         for (final var interceptor : interceptors) {
             if (!interceptor.preTransition(oldState.id(), transition.target(), event, context)) {
                 notifyListenersOnError(oldState, event, new TransitionExecutionException(
                     "Transition vetoed by interceptor", null,
                     oldState.id(), event.type(), transition.target()
                 ));
-                return currentState;
-            }
-        }
-
-        // Step 5: Guard evaluation
-        if (Objects.nonNull(transition.guard())) {
-            try {
-                if (!transition.guard().evaluate(context)) {
-                    return currentState;
-                }
-            } catch (final Exception e) {
                 return currentState;
             }
         }
@@ -168,6 +175,28 @@ public final class DefaultStateMachine<S, E, C> implements StateMachine<S, E, C>
         return currentState;
     }
 
+    /**
+     * Picks the first candidate whose guard passes. A {@code null} guard always
+     * matches, so a trailing guard-less candidate acts as the deterministic
+     * fallback. Returns {@code null} when no candidate's guard passes.
+     */
+    private Transition<S, E, C> select(final List<Transition<S, E, C>> candidates,
+                                       final C context) {
+        for (final var candidate : candidates) {
+            if (Objects.isNull(candidate.guard())) {
+                return candidate;
+            }
+            try {
+                if (candidate.guard().evaluate(context)) {
+                    return candidate;
+                }
+            } catch (final Exception e) {
+                // guard exception counts as a failed match — try the next candidate
+            }
+        }
+        return null;
+    }
+
     @Override
     public State<S, C> getCurrentState() {
         return currentState;
@@ -186,6 +215,11 @@ public final class DefaultStateMachine<S, E, C> implements StateMachine<S, E, C>
     @Override
     public Set<Transition<S, E, C>> getTransitions() {
         return transitionIndex.getAllTransitions();
+    }
+
+    @Override
+    public Optional<Transition<S, E, C>> getLastTransition() {
+        return lastTransition;
     }
 
     @Override

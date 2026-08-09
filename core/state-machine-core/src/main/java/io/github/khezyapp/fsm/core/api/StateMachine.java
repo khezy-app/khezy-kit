@@ -4,6 +4,7 @@ import io.github.khezyapp.fsm.core.model.Event;
 import io.github.khezyapp.fsm.core.model.State;
 import io.github.khezyapp.fsm.core.model.Transition;
 
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -76,6 +77,18 @@ public interface StateMachine<S, E, C> {
      * @return a set of all defined transitions
      */
     Set<Transition<S, E, C>> getTransitions();
+
+    /**
+     * Returns the transition selected by the most recent {@link #fire(Event, Object)}.
+     * <p>
+     * This is the winning candidate of guard-driven branching — the first candidate
+     * whose guard returned {@code true}. It is empty when the most recent {@code fire()}
+     * was a no-op: the machine was in a final state, the event was null, or no candidate
+     * transition was selected (no transition exists, or no guard passed).
+     *
+     * @return the selected transition, or {@link Optional#empty()} if the last fire was a no-op
+     */
+    Optional<Transition<S, E, C>> getLastTransition();
 
     /**
      * Returns {@code true} if the machine is currently in a final (terminal) state.
