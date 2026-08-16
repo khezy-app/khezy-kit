@@ -1,0 +1,24 @@
+plugins {
+    id("khezy.java-library")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'Certificate Util'
+        description = """
+        Bouncy Castle-backed certificate utilities for mTLS: PEM and Base64-DER certificate/key \
+        parsing, PEM encoding, and in-memory key store / client SSL context building from ASCII \
+        (database-storable) configuration."""
+    }
+}
+
+ext {
+    bouncycastleVersion = "1.85"
+}
+
+dependencies {
+    api "org.bouncycastle:bcpkix-jdk18on:${bouncycastleVersion}"
+}

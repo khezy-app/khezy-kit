@@ -265,12 +265,12 @@ public interface StateMachineListener<S, E> {
     default void onTransitionComplete(S sourceState, S targetState, Event<E> event) {}
 
     /**
-     * Called when the current state changes.
+     * Called whens the current state changes.
      */
     default void onStateChanged(S oldState, S newState) {}
 
     /**
-     * Called when an error occurs during transition.
+     * Called whens an error occurs during transition.
      */
     default void onError(S currentState, Event<E> event, Exception exception) {}
 }

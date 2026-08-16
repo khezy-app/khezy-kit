@@ -133,10 +133,10 @@ action(ctx -> auditLog.log("KYC submitted for validation"))
 **Example:** When entering INFO_COLLECTED, always perform age validation. When entering APPROVED, always log the result.
 
 ```java
-// Entry action on INFO_COLLECTED: always runs when entering this state
+// Entry action on INFO_COLLECTED: always runs whens entering this state
 .onEntry(ctx -> performAgeCheck(ctx))
 
-// Exit action on DRAFT: always runs when leaving DRAFT
+// Exit action on DRAFT: always runs whens leaving DRAFT
 .onExit(ctx -> validateFields(ctx))
 ```
 

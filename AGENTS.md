@@ -2,7 +2,7 @@
 
 ## Project structure
 
-Multi-module Gradle **composite build** (10 independent Gradle builds wired via root `settings.gradle`). Each module has its own `settings.gradle`, `build.gradle`, and version.
+Multi-module Gradle **composite build** (11 independent Gradle builds wired via root `settings.gradle`). Each module has its own `settings.gradle`, `build.gradle`, and version.
 
 | Module | Path | Maven coordinate | Version |
 |---|---|---|---|---|
@@ -16,6 +16,7 @@ Multi-module Gradle **composite build** (10 independent Gradle builds wired via 
 | simple-prompt-template | `templates/simple-prompt-template` | `io.github.khezyapp:simple-prompt-template` | `1.0.0` |
 | pluginlib | `utils/pluginlib` | `io.github.khezyapp:pluginlib` | `1.0.0` |
 | ast-expression-core | `core/ast-expression-core` | `io.github.khezyapp:ast-expression-core` | `1.0.0` |
+| declarative-http | `http/declarative-http` | `io.github.khezyapp:declarative-http` | `1.0.0` |
 
 ## Build system
 
@@ -57,12 +58,15 @@ Multi-module Gradle **composite build** (10 independent Gradle builds wired via 
 # Test only (ast-expression-core)
 ./gradlew :ast-expression-core:test
 
+# Build + test + checkstyle declarative-http (JEXL engine, OAuth2, credentials)
+./gradlew :declarative-http:build
+
 # Release to Maven Central (manual CI only — see .github/workflows/manual_release.yml)
 ```
 
 ## Key conventions
 
-- Package base: `io.github.khezyapp.<module-prefix>` (e.g. `io.github.khezyapp.doa`, `io.github.khezyapp.datamasker`, `io.github.khezyapp.clone`, `io.github.khezyapp.fsm.core` for state-machine-core)
+- Package base: `io.github.khezyapp.<module-prefix>` (e.g. `io.github.khezyapp.doa`, `io.github.khezyapp.datamasker`, `io.github.khezyapp.clone`, `io.github.khezyapp.dhttp` for declarative-http, `io.github.khezyapp.fsm.core` for state-machine-core)
 - Each module declares its own `group` and `version` in `build.gradle` (or `gradle.properties` for storage modules)
 - Storage modules (`storage-api`, `storage-fs`) are still `1.0.0-SNAPSHOT` (pre-release); all others are published releases
 - Modules that use Lombok set `compileOnly` extends `annotationProcessor` via convention plugin; no manual lombok config needed

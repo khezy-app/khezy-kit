@@ -41,7 +41,7 @@ Build-logic lives in `build-logic/` as a separate included build with convention
 ```groovy
 plugins {
     id("khezy.java-library")
-    // id("khezy.java-lombok")  // only when Lombok needed
+    // id("khezy.java-lombok")  // only whens Lombok needed
 }
 
 group = "io.github.khezyapp.<group-suffix>"

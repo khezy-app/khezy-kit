@@ -116,13 +116,13 @@ Entry and exit actions fire automatically whenever a state boundary is crossed:
 machine = StateMachineBuilder.<String, String, KycContext>builder()
     .initialState("DRAFT")
 
-    // onExit fires when leaving DRAFT (regardless of target)
+    // onExit fires whens leaving DRAFT (regardless of target)
     .state("DRAFT",
         List.of(),                                   // onEntry: none
         List.of(ctx -> validateFields(ctx))          // onExit: always validate
     )
 
-    // onEntry fires when entering INFO_COLLECTED (regardless of source)
+    // onEntry fires whens entering INFO_COLLECTED (regardless of source)
     .state("INFO_COLLECTED",
         List.of(ctx -> performAgeCheck(ctx)),        // onEntry: always check age
         List.of()                                    // onExit: none

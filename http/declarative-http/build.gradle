@@ -1,0 +1,39 @@
+plugins {
+    id("khezy.java-library")
+    id("khezy.java-lombok")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'Declarative HTTP'
+        description = """
+        A framework-agnostic declarative HTTP engine: describe how to talk to a REST API as plain \
+        data (a spec), and the core executes it. Handles OAuth2 with token refresh, four built-in \
+        pagination modes plus pluggable strategies, declarative post-receive response shaping, \
+        SSRF guards, redirect safety, and design-time searchable/paginated dropdowns via \
+        describe(...). Ships a JDK HttpClient transport and lets you plug in your own."""
+    }
+}
+
+ext {
+    jexlVersion = "3.7.0"
+    handlebarsVersion = "4.5.3"
+    dynamicObjectVersion = "1.0.1"
+    jacksonVersion = "3.2.1"
+    certificateUtilVersion = "1.0.0"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-Xlint:-processing")
+}
+
+dependencies {
+    api "io.github.khezyapp:dynamic-object:${dynamicObjectVersion}"
+    api "io.github.khezyapp:certificate-util:${certificateUtilVersion}"
+    api "org.apache.commons:commons-jexl3:${jexlVersion}"
+    implementation "com.github.jknack:handlebars:${handlebarsVersion}"
+    implementation "tools.jackson.core:jackson-databind:${jacksonVersion}"
+}
