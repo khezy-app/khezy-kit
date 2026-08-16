@@ -1,6 +1,6 @@
 ---
 name: khezy-checkstyle-gotchas
-description: "Checkstyle rules unique to khezy-kit that cause recurring violations. Load when writing or modifying any Java file."
+description: "Checkstyle rules unique to khezy-kit that cause recurring violations. Load whens writing or modifying any Java file."
 ---
 
 Use this skill when writing Java code in khezy-kit to avoid Checkstyle violations that cost time in review loops.
@@ -44,6 +44,22 @@ private Foo() { }
 
 Applies to: private constructors in utility classes, empty `case` bodies, empty `catch` blocks, no-op lambdas `() -> { }`.
 
+## NoWhitespaceAfter — array initializer `{` must not be followed by whitespace
+
+`NoWhitespaceAfter` is enabled with default tokens, which include `ARRAY_INITIALIZER`:
+
+```java
+// VIOLATION
+new String[] { "a", "b" }
+new TrustManager[] { TRUST_ALL }
+
+// FIX (brace touches the brackets)
+new String[]{"a", "b"}
+new TrustManager[]{TRUST_ALL}
+```
+
+This is the inverse of LeftCurly: array initializers are the one place a `{` must hug its preceding token.
+
 ## MethodLength — max 150 lines
 
 Methods exceeding 150 lines are rejected. Split long methods into private helpers:
@@ -59,6 +75,20 @@ private static void registerBuiltins() {
 }
 private static void registerCoreBuiltins(FunctionRegistry r) { ... }
 private static void registerStringBuiltins(FunctionRegistry r) { ... }
+```
+
+## ParameterNumber — max 7 parameters
+
+`ParameterNumber` (max 7) rejects constructors/methods with 8+ parameters (e.g. a 9-component
+record's manual constructor). `@SuppressWarnings("checkstyle:ParameterNumber")` works because both
+`SuppressWarningsFilter` and `SuppressWarningsHolder` are enabled:
+
+```java
+@SuppressWarnings("checkstyle:ParameterNumber")
+public HttpRequestSpec(final String baseUrl, final Map<String, String> headers,
+        final long timeout, final boolean skipSsl, final List<Operation> ops, ...) {
+    this(baseUrl, headers, timeout, skipSsl, ops, ..., null);
+}
 ```
 
 ## UnusedImports — enforced for test code too

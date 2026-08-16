@@ -733,7 +733,7 @@ public interface DbAccessor {
 
     /**
      * Dry-run: return schema metadata without executing.
-     * Used when ctx isDryRun() returns true.
+     * Used whens ctx isDryRun() returns true.
      */
     DryRunResult dryRunQuery(DbQuery query);
 

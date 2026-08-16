@@ -13,6 +13,8 @@ rootProject.name = 'khezy-kit'
 includeBuild("core/state-machine-core")
 includeBuild("core/ast-expression-core")
 
+includeBuild("http/declarative-http")
+
 includeBuild("storage/storage-api")
 includeBuild("storage/storage-fs")
 
@@ -20,6 +22,7 @@ includeBuild("utils/string-util")
 includeBuild("utils/dynamic-object")
 includeBuild("utils/clone-util")
 includeBuild("utils/pluginlib")
+includeBuild("utils/certificate-util")
 
 includeBuild("securities/data-masker")
 

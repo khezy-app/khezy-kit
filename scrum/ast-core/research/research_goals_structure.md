@@ -320,7 +320,7 @@ class EvaluationTrace {
     boolean skipped;        // short-circuited / not evaluated
     boolean cached;         // result was from cache
     long durationNanos;     // wall-clock time for this node
-    Instant evaluatedAt;    // when evaluation happened
+    Instant evaluatedAt;    // whens evaluation happened
 }
 
 class EvaluationError {

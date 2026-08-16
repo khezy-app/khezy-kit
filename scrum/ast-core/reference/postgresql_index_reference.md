@@ -148,7 +148,7 @@ SELECT * FROM orders ORDER BY created_at DESC LIMIT 10;
 -- ❌ Does NOT use index (non-anchored pattern)
 SELECT * FROM orders WHERE status LIKE '%pending%';
 
--- ❌ Sequential scan preferred when matching too many rows
+-- ❌ Sequential scan preferred whens matching too many rows
 SELECT * FROM orders WHERE created_at > '2020-01-01';  -- might skip index
 ```
 
