@@ -1,0 +1,21 @@
+plugins {
+    id("khezy.java-library")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+ext {
+    assertjVersion = '3.27.7'
+}
+
+dependencies {
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
+}
+
+mavenPublishing {
+    pom {
+        name = 'data-privacy-core'
+        description = """Deterministic text-level data privacy engine: PII catalog, secret scanning, URL validation, typed redaction, streaming support, and a pluggable LLM-classifier SPI."""
+    }
+}
