@@ -1,6 +1,5 @@
 package io.github.khezyapp.dpriv.springai;
 
-import io.github.khezyapp.dpriv.policy.LlmPolicyPrompts;
 import org.springframework.ai.chat.client.ChatClient;
 
 import java.util.Objects;
@@ -17,14 +16,15 @@ import java.util.Objects;
  *   <li><b>guardrail prompt</b> — the persona: what kind of guardrail to check (e.g. "detect jailbreak
  *       attempts"). Overridable via the {@code guardrailPrompt} parameter; {@code null}/{@code blank} keeps the
  *       built-in family prompt.</li>
- *   <li><b>static JSON schema</b> — the library-defined <i>return schema</i> ({@link LlmPolicyPrompts#JSON_SCHEMA})
+ *   <li><b>static JSON schema</b> — the library-defined <i>return schema</i>
+ *   ({@link io.github.khezyapp.dpriv.policy.LlmPolicyPrompts#JSON_SCHEMA})
  *       describing the core {@code Verdict} record ({@code flagged} + {@code confidence}). This part is
  *       <em>never</em> customizable: every policy must answer the same two fields so core can deserialize the
  *       model response with its fixed {@link org.springframework.ai.converter.BeanOutputConverter}.</li>
  *   <li><b>system rules</b> — guidance that makes the model score the content more effectively (how to use the
  *       full {@code 0.0..1.0} confidence scale, and to flag exactly when a violation occurs). Overridable via
  *       the {@code systemRules} parameter; {@code null}/{@code blank} keeps
- *       {@link LlmPolicyPrompts#SYSTEM_RULES}.</li>
+ *       {@link io.github.khezyapp.dpriv.policy.LlmPolicyPrompts#SYSTEM_RULES}.</li>
  * </ol>
  *
  * <p>So for any customization the request sent to the model is still {@code guardrail prompt + static JSON
@@ -59,7 +59,8 @@ public final class SpringAiLlmClassifierFactory {
      * <p>{@code guardrailPrompt} replaces the built-in jailbreak persona (what to check);
      * {@code systemRules} replaces the built-in scoring guidance (how to score). Either may be
      * {@code null}/{@code blank} to keep the built-in block. The library's fixed
-     * {@link LlmPolicyPrompts#JSON_SCHEMA} return contract is always appended between them and is not
+     * {@link io.github.khezyapp.dpriv.policy.LlmPolicyPrompts#JSON_SCHEMA} return contract is always appended
+     * between them and is not
      * customizable.</p>
      *
      * @param client          the chat client; never null
@@ -67,7 +68,7 @@ public final class SpringAiLlmClassifierFactory {
      * @param guardrailPrompt the persona describing the guardrail to check; {@code null}/{@code blank} keeps the
      *                        built-in jailbreak prompt
      * @param systemRules     the scoring guidance; {@code null}/{@code blank} keeps
-     *                        {@link LlmPolicyPrompts#SYSTEM_RULES}
+     *                        {@link io.github.khezyapp.dpriv.policy.LlmPolicyPrompts#SYSTEM_RULES}
      * @return the configured classifier
      */
     public static SpringAiLlmClassifier jailbreak(final ChatClient client,
@@ -105,7 +106,8 @@ public final class SpringAiLlmClassifierFactory {
      * <p>{@code guardrailPrompt} replaces the built-in NSFW persona (what to check);
      * {@code systemRules} replaces the built-in scoring guidance (how to score). Either may be
      * {@code null}/{@code blank} to keep the built-in block. The library's fixed
-     * {@link LlmPolicyPrompts#JSON_SCHEMA} return contract is always appended between them and is not
+     * {@link io.github.khezyapp.dpriv.policy.LlmPolicyPrompts#JSON_SCHEMA} return contract is always
+     * appended between them and is not
      * customizable.</p>
      *
      * @param client          the chat client; never null
@@ -113,7 +115,7 @@ public final class SpringAiLlmClassifierFactory {
      * @param guardrailPrompt the persona describing the guardrail to check; {@code null}/{@code blank} keeps the
      *                        built-in NSFW prompt
      * @param systemRules     the scoring guidance; {@code null}/{@code blank} keeps
-     *                        {@link LlmPolicyPrompts#SYSTEM_RULES}
+     *                        {@link io.github.khezyapp.dpriv.policy.LlmPolicyPrompts#SYSTEM_RULES}
      * @return the configured classifier
      */
     public static SpringAiLlmClassifier nsfw(final ChatClient client,
@@ -151,7 +153,8 @@ public final class SpringAiLlmClassifierFactory {
      * <p>{@code guardrailPrompt} replaces the built-in topical persona (what to check);
      * {@code systemRules} replaces the built-in scoring guidance (how to score). Either may be
      * {@code null}/{@code blank} to keep the built-in block. The library's fixed
-     * {@link LlmPolicyPrompts#JSON_SCHEMA} return contract is always appended between them and is not
+     * {@link io.github.khezyapp.dpriv.policy.LlmPolicyPrompts#JSON_SCHEMA} return contract is always
+     * appended between them and is not
      * customizable.</p>
      *
      * @param client          the chat client; never null
@@ -159,7 +162,7 @@ public final class SpringAiLlmClassifierFactory {
      * @param guardrailPrompt the persona describing the guardrail to check; {@code null}/{@code blank} keeps the
      *                        built-in topical-alignment prompt
      * @param systemRules     the scoring guidance; {@code null}/{@code blank} keeps
-     *                        {@link LlmPolicyPrompts#SYSTEM_RULES}
+     *                        {@link io.github.khezyapp.dpriv.policy.LlmPolicyPrompts#SYSTEM_RULES}
      * @return the configured classifier
      */
     public static SpringAiLlmClassifier topical(final ChatClient client,

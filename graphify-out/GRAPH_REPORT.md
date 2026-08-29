@@ -1,16 +1,16 @@
-# Graph Report - khezy-kit  (2026-08-29)
+# Graph Report - khezy-kit  (2026-08-30)
 
 ## Corpus Check
-- 574 files · ~278,486 words
+- 600 files · ~298,811 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5044 nodes · 13664 edges · 264 communities (239 shown, 25 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 1090 edges (avg confidence: 0.8)
+- 5420 nodes · 14564 edges · 290 communities (265 shown, 25 thin omitted)
+- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 1101 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5417ee20`
+- Built from commit: `013fa028`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -210,7 +210,6 @@
 - Task 03 — Redaction engine: `redact/Placeholders` + `redact/Redactor` + `internal/AhoCorasick`
 - Task 08 — LLM check core: `policy/LlmContract` + `policy/LlmPolicyPrompts` + `checks/LlmCheck`
 - Task 12 — Spring AI adapter: `securities/data-privacy-spring-ai` + `SpringAiLlmClassifier`
-- data_privacy_core_design.md
 - Data Privacy & Content Security — Guardrails Research Docs
 - Task 01 — Module scaffold (core + Spring AI adapter) & root wiring
 - Task 04 — PII catalog: `policy/PiiPatterns` (33 patterns) + `policy/ChecksumValidators`
@@ -243,6 +242,32 @@
 - ObjectAccessor
 - .sortsAscending
 - OAuth2AuthorizationFlow
+- Files to create
+- DataPrivacyAdvisorStreamTest.java
+- .withBuiltins
+- Builder
+- .of
+- Task 04 — Composition acceptance: end-to-end order, guarantee regression, README
+- Builder
+- Task 02 — `DataPrivacyAdvisor` (mitigate pattern): builder, before/after, streaming
+- Task 03 — `GuardrailAdvisor` (prevent pattern): builder, before/after, streaming
+- .evaluate
+- AdvisorTypesTest
+- CustomRegexCheckTest
+- .isStrictMatch
+- GuardrailReport.java
+- 8. Behavior specification
+- .capsAtMax
+- Advisors
+- 11. Family B: LLM-as-judge checks — Spring AI is the default (decision §1.1)
+- ChecksumValidators
+- 10. Streaming engine (decision §1.4)
+- 6. Pipeline
+- 2. Positioning: a data privacy & security library, not an LLM library
+- 3. Compliance / masking policy: guarantee scope
+- 4. Module & package layout
+- 7. Redactor & the `<ENTITY>` placeholder contract
+- 8. PII catalog — the full entity list (decision §1.3)
 
 ## God Nodes (most connected - your core abstractions)
 1. `HttpRequest` - 132 edges
@@ -282,7 +307,7 @@
 - **Three Layers of Representation** — utils_pluginlib_README_plugincandidate, utils_pluginlib_README_installedplugin, utils_pluginlib_README_plugin_instance [EXTRACTED 1.00]
 - **StringUtil Feature Groups** — utils_string_util_README_null_safe_checks, utils_string_util_README_comparisons, utils_string_util_README_transformations, utils_string_util_README_advanced_stripping, utils_string_util_README_splitting [INFERRED 0.90]
 
-## Communities (264 total, 25 thin omitted)
+## Communities (290 total, 25 thin omitted)
 
 ### Community 0 - "Arithmetic Evaluation Tests"
 Cohesion: 0.12
@@ -293,48 +318,44 @@ Cohesion: 0.06
 Nodes (14): ArgumentsTest, CreationTests, EqualityTests, DisplayName, Nested, Test, NullSource, StringUtil (+6 more)
 
 ### Community 2 - "Field Extraction Tests"
-Cohesion: 0.13
-Nodes (6): AnalyzerOperatorClassificationTests, ConcreteIndexCoverageTests, Test, PlannerFilterExistingTests, PlannerMinimizeTests, PlannerProjectToConcreteTests
+Cohesion: 0.12
+Nodes (7): AnalyzerOperatorClassificationTests, ConcreteIndexCoverageTests, DisplayName, Nested, PlannerFilterExistingTests, PlannerMinimizeTests, PlannerProjectToConcreteTests
 
 ### Community 3 - "Arithmetic Evaluator"
-Cohesion: 0.22
-Nodes (7): BrevoSpecAcceptanceTest, BeforeEach, DisplayName, SecretKey, Test, FakeTransport, Override
+Cohesion: 0.16
+Nodes (8): DeclarativeHttp, BrevoSpecAcceptanceTest, BeforeEach, DisplayName, SecretKey, Test, FakeTransport, Override
 
 ### Community 4 - "Dynamic Objects Tests"
-Cohesion: 0.08
-Nodes (30): Benchmark, BenchmarkMode, Fork, Measurement, OutputTimeUnit, Setup, AccessorBenchmark, AllArgsConstructor (+22 more)
+Cohesion: 0.06
+Nodes (34): Benchmark, BenchmarkMode, Fork, ConditionEvaluator, ConditionEvaluatorTest, DisplayName, Test, Measurement (+26 more)
 
 ### Community 5 - "Date Evaluators"
-Cohesion: 0.13
-Nodes (6): CredentialStore, FunctionalInterface, Builder, DisplayName, Test, PaginationRegistryTest
+Cohesion: 0.40
+Nodes (4): DisplayName, Test, MarkerPagination, PaginationRegistryTest
 
 ### Community 6 - "String Contains Tests"
-Cohesion: 0.12
-Nodes (17): Override, Override, Override, Override, StringSimilarityEvaluator, Override, Arguments, DisplayName (+9 more)
+Cohesion: 0.10
+Nodes (17): Override, Override, StringFuzzyMatchEvaluator, Override, Override, StringSimilarityEvaluator, Override, DisplayName (+9 more)
 
 ### Community 7 - "AST Index Analyzer"
-Cohesion: 0.07
-Nodes (30): 10.1 `TextChunker` — windowed reader with overlap, 10.2 Bounded memory guarantee, 10.3 Streaming variants per check, 10. Streaming engine (decision §1.4), 13. Threading & failure policy (03 §8, confirmed), 14. Testing strategy, 15. Relation to existing modules, 16. Non-goals & future work (+22 more)
+Cohesion: 0.29
+Nodes (7): 13. Threading & failure policy (03 §8, confirmed), 14. Testing strategy, 15. Relation to existing modules, 16. Non-goals & future work, 17. Standards & attribution, 1. Resolved decisions (answers to 03 §11), Data Privacy Core — Java Library Design (v1)
 
 ### Community 8 - "Index Family"
-Cohesion: 0.05
+Cohesion: 0.06
 Nodes (34): PiiEntity, AU_ABN, AU_ACN, AU_MEDICARE, AU_TFN, CREDIT_CARD, CRYPTO, DATE_TIME (+26 more)
 
 ### Community 9 - "Evaluation Cache"
-Cohesion: 0.32
-Nodes (3): EndToEndIndexDetectionTest, DisplayName, RealWorldUseCaseTests
+Cohesion: 0.31
+Nodes (3): EndToEndIndexDetectionTest, Test, RealWorldUseCaseTests
 
 ### Community 10 - "DB Aggregator Evaluator"
-Cohesion: 0.11
-Nodes (13): DbAggregatorEvaluator, Override, SuppressWarnings, FilterBuilderEvaluator, Override, DataType, BOOLEAN, FLOAT (+5 more)
+Cohesion: 0.05
+Nodes (24): DbAccessEvaluator, Override, SuppressWarnings, DbAccessor, DryRunResult, DbAggregatorEvaluator, Override, SuppressWarnings (+16 more)
 
 ### Community 11 - "State Machine Actions"
 Cohesion: 0.11
 Nodes (8): Action, FunctionalInterface, Guard, FunctionalInterface, StateMachineBuilder, TransitionConfigurer, TransitionIndex, Transition
-
-### Community 12 - "Evaluator Implementations"
-Cohesion: 0.10
-Nodes (4): Auth, BasicAuth, NoAuth, HttpRequestBuilder
 
 ### Community 13 - "Template Configuration"
 Cohesion: 0.24
@@ -349,24 +370,24 @@ Cohesion: 0.11
 Nodes (7): DoaNamespace, CollectionTypeAdapter, ObjectAccessor, PathParser, AccessorFactory, AccessorFactoryImpl, Override
 
 ### Community 16 - "Field Expression Filter"
-Cohesion: 0.08
+Cohesion: 0.07
 Nodes (23): FieldExpression, FilterCondition, FilterOperator, ALL_KEYS_EXIST, ANY_KEY_EXISTS, ARRAY_CONTAINED_BY, ARRAY_CONTAINS, ARRAY_OVERLAP (+15 more)
 
 ### Community 17 - "Index Detection Tests"
-Cohesion: 0.07
-Nodes (13): GuardrailCheck, FunctionalInterface, GuardrailCheckFactory, FunctionalInterface, Builder, Builder, GuardrailsConfig, LlmCheckConfig (+5 more)
+Cohesion: 0.10
+Nodes (11): Charset, AbstractHttpTransport, URI, Multipart, PreparedBody, ArrayFormat, BRACKETS, COMMA (+3 more)
 
 ### Community 18 - "In-Memory Plugin Store"
 Cohesion: 0.20
 Nodes (6): InMemoryPluginStore, Override, InMemoryPluginStoreTest, BeforeEach, DisplayName, Test
 
 ### Community 19 - "Function Registry"
-Cohesion: 0.36
-Nodes (4): BinaryData, HttpRequestSpecTest, DisplayName, Test
+Cohesion: 0.10
+Nodes (21): 10. Config reference — "when to apply the control", 11.1 Chain mechanics (why the defaults compose correctly), 11.2 Interplay table, 11. Ordering & composition, 12. Testing strategy, 13. Build & release plan, 14. Suggested implementation order (task sketch), 15. Non-goals & future work (explicitly not in v2) (+13 more)
 
 ### Community 20 - "Aggregate Query Family"
-Cohesion: 0.05
-Nodes (27): BinaryData, CustomPostReceive, FilterItems, LimitItems, RootProperty, SetKeyValue, SuppressWarnings, SetValue (+19 more)
+Cohesion: 0.07
+Nodes (22): BinaryData, Override, CustomPostReceive, FilterItems, LimitItems, RootProperty, SetKeyValue, SuppressWarnings (+14 more)
 
 ### Community 21 - "NextUrlPagination"
 Cohesion: 0.10
@@ -375,6 +396,10 @@ Nodes (17): PEMEncryptedKeyPair, PEMKeyPair, PKCS8EncryptedPrivateKeyInfo, Priva
 ### Community 22 - "Function Attributes"
 Cohesion: 0.27
 Nodes (8): Named, CreationTests, EqualityTests, FunctionIdTest, DisplayName, Nested, Test, ToStringTests
+
+### Community 23 - "Evaluation Cache Builder"
+Cohesion: 0.08
+Nodes (3): EvaluationCache, Builder, Message
 
 ### Community 24 - "Sensitive Masker"
 Cohesion: 0.05
@@ -401,16 +426,16 @@ Cohesion: 0.11
 Nodes (5): SignedUrlOptions, StorageMetadata, StorageService, FileSystemStorageService, Override
 
 ### Community 30 - "JOOQ SQL Dialect Implementation"
-Cohesion: 0.05
-Nodes (17): FunctionalInterface, PreSendAction, Authenticator, FunctionalInterface, GenericAuthenticator, Override, Override, URI (+9 more)
+Cohesion: 0.07
+Nodes (14): FunctionalInterface, PreSendAction, Override, Auth, BasicAuth, NoAuth, HttpRequest, Builder (+6 more)
 
 ### Community 31 - "Default State Machine Tests"
 Cohesion: 0.27
 Nodes (3): DefaultStateMachineTest, DisplayName, Test
 
 ### Community 32 - "Sensitive Masker Tests"
-Cohesion: 0.05
-Nodes (28): AesGcmCredentialCipher, Override, SecretKey, TypeReference, CredentialCipher, CredentialRepository, CredentialService, SuppressWarnings (+20 more)
+Cohesion: 0.06
+Nodes (23): AesGcmCredentialCipher, Override, SecretKey, TypeReference, CredentialCipher, CredentialRepository, SuppressWarnings, CredentialSummary (+15 more)
 
 ### Community 33 - "Payload Evaluator Tests"
 Cohesion: 0.29
@@ -425,27 +450,27 @@ Cohesion: 0.12
 Nodes (17): 5. Extracted User Requirements (the contract a Java core must meet), R10 — Credential abstraction & auth injection, R11 — Rich transport contract (parity with `IHttpRequestOptions`), R12 — Security-first defaults, R13 — Error model, R14 — Cancellation & lifecycle, R15 — Metadata/design-time mode, R16 — Deterministic, testable engine (+9 more)
 
 ### Community 36 - "Built-in Function Registration"
-Cohesion: 0.30
-Nodes (4): ConditionEvaluator, ConditionEvaluatorTest, DisplayName, Test
+Cohesion: 0.08
+Nodes (13): Builder, Builder, LlmCheckConfig, LlmClassifier, Override, LlmCheck, LlmContract, DisplayName (+5 more)
 
 ### Community 37 - "Clone Context"
 Cohesion: 0.15
 Nodes (10): CloneContext, SuppressWarnings, ArrayStrategy, Override, SuppressWarnings, Override, SuppressWarnings, Override (+2 more)
 
 ### Community 38 - "Function ID Tests"
-Cohesion: 0.12
+Cohesion: 0.11
 Nodes (8): DomainAllowList, SsrfGuard, DomainAllowListTest, DisplayName, Test, DisplayName, Test, SsrfGuardTest
 
 ### Community 39 - "JOOQ DB Accessor"
-Cohesion: 0.41
-Nodes (4): Redactor, DisplayName, Test, StreamCheckParityTest
+Cohesion: 0.24
+Nodes (7): Redactor, DisplayName, Test, StreamCheckParityTest, DisplayName, Test, RedactorTest
 
 ### Community 40 - "Default State Machine"
-Cohesion: 0.23
+Cohesion: 0.17
 Nodes (4): DefaultStateMachine, Override, Event, State
 
 ### Community 41 - "Bean Adapter"
-Cohesion: 0.19
+Cohesion: 0.20
 Nodes (6): Lookup, MethodHandle, BeanAdapter, Method, Override, Slf4j
 
 ### Community 42 - "Plugin Info Tests"
@@ -453,7 +478,7 @@ Cohesion: 0.24
 Nodes (8): DisplayName, Override, Test, JsonTransformer, PlainTransformer, PluginInfoTest, Transformer, XmlTransformer
 
 ### Community 43 - "State Machine Listener Tests"
-Cohesion: 0.28
+Cohesion: 0.38
 Nodes (4): StateMachineListener, DisplayName, Test, StateMachineListenerTest
 
 ### Community 44 - "Plugin Manager Tests"
@@ -473,16 +498,16 @@ Cohesion: 0.20
 Nodes (5): CloneStrategy, Builder, DefaultCloner, Override, CollectionStrategy
 
 ### Community 48 - "AST Evaluator Dry Run"
-Cohesion: 0.09
-Nodes (13): DbAggregation, DbColumn, DbFilter, DbJoin, DbOrder, Builder, DbTable, FilterValue (+5 more)
+Cohesion: 0.06
+Nodes (43): DSLContext, Override, JooqDbAccessor, DSLContext, Field, Override, SuppressWarnings, JooqSqlDialect (+35 more)
 
 ### Community 49 - "InMemoryTokenStore"
-Cohesion: 0.15
-Nodes (9): CapturingClassifier, FlaggingClassifier, GuaranteeScopeTest, DisplayName, Override, Test, ThrowingCheck, ThrowingClassifier (+1 more)
+Cohesion: 0.06
+Nodes (21): CapturingClassifier, GuardrailsStreamingTest, DisplayName, Override, Test, CapturingClassifier, FlaggingClassifier, GuardrailsTest (+13 more)
 
 ### Community 50 - "Plugin Sources"
-Cohesion: 0.14
-Nodes (8): AbstractHttpTransport, Multipart, PreparedBody, ArrayFormat, BRACKETS, COMMA, INDICES, REPEAT
+Cohesion: 0.15
+Nodes (3): DeclarativeHttpEngine, OptionItem, OptionPage
 
 ### Community 51 - "Project Documentation"
 Cohesion: 0.12
@@ -505,8 +530,8 @@ Cohesion: 0.10
 Nodes (6): Provider, FunctionalInterface, PluginLoader, Builder, Override, ServiceLoaderPluginLoader
 
 ### Community 56 - "Sensitive Masker Builders"
-Cohesion: 0.08
-Nodes (16): DeclarativeHttp, DeclarativeHttpConfig, GuardedTransport, HttpApiException, Getter, Getter, OAuth2NotConfiguredException, JacksonJsonMapper (+8 more)
+Cohesion: 0.09
+Nodes (15): OAuth2Credentials, HttpApiException, Getter, Getter, OAuth2NotConfiguredException, JacksonJsonMapper, AuthRequest, CredentialRef (+7 more)
 
 ### Community 57 - "Composite Type Adapter"
 Cohesion: 0.25
@@ -517,7 +542,7 @@ Cohesion: 0.22
 Nodes (5): DefaultPathParser, Override, IndexToken, PathToken, PropertyToken
 
 ### Community 59 - "State Machine Interceptor Tests"
-Cohesion: 0.36
+Cohesion: 0.45
 Nodes (4): StateMachineInterceptor, DisplayName, Test, StateMachineInterceptorTest
 
 ### Community 60 - "Transition Exception"
@@ -529,16 +554,16 @@ Cohesion: 0.13
 Nodes (15): Classloader Isolation, CompositePluginLoader, DirectoryPluginLoader, Discovery, InMemoryPluginStore, InstalledPlugin, Lifecycle, Plugin Lib (+7 more)
 
 ### Community 62 - "Arguments Tests"
-Cohesion: 0.26
-Nodes (5): HttpErrorFactory, Pattern, HttpErrorFactoryTest, DisplayName, Test
+Cohesion: 0.23
+Nodes (7): CompositionOrderTest, ChatResponse, DisplayName, Override, Prompt, Test, RecordingChatModel
 
 ### Community 63 - "State Machine Builder Tests"
 Cohesion: 0.45
 Nodes (3): DisplayName, Test, StateMachineBuilderTest
 
 ### Community 64 - "Clone Ignore Strategy"
-Cohesion: 0.06
-Nodes (28): Override, TypeReference, FragmentMerger, SuppressWarnings, SuppressWarnings, RequestPlanner, SuppressWarnings, Builder (+20 more)
+Cohesion: 0.25
+Nodes (8): Builder, RequestShape, Builder, Send, DisplayName, Operation, Test, RequestPlannerTest
 
 ### Community 65 - "AST Design Documentation"
 Cohesion: 0.17
@@ -553,12 +578,12 @@ Cohesion: 0.30
 Nodes (12): NoArgsConstructor, Address, ClonesTest, AllArgsConstructor, DisplayName, Getter, Setter, Test (+4 more)
 
 ### Community 68 - "Date Extraction Evaluator"
-Cohesion: 0.04
-Nodes (27): ArithmeticEvaluator, BooleanLogicEvaluator, Override, ComparisonEvaluator, SuppressWarnings, DefaultIfNullEvaluator, FunctionAttributes, Builder (+19 more)
+Cohesion: 0.05
+Nodes (24): NotEvaluator, AstEvaluator, ChildResult, FunctionAttributes, Builder, FunctionDefinition, FunctionRegistry, ParamSpec (+16 more)
 
 ### Community 69 - "Core Temporal Utilities"
-Cohesion: 0.04
-Nodes (33): Override, BuiltinSupport, SuppressWarnings, Override, Override, Override, Override, Override (+25 more)
+Cohesion: 0.05
+Nodes (26): BuiltinSupport, SuppressWarnings, Override, Override, Override, Override, Override, OutputRecord (+18 more)
 
 ### Community 70 - "Error Codes"
 Cohesion: 0.27
@@ -569,28 +594,28 @@ Cohesion: 0.09
 Nodes (21): Attach attributes when:, Attribute key convention:, Building a Rule Engine on Top, Choosing: Positional vs Named Arguments, Do NOT attach attributes when:, Extending AST Expression Core, How This Library Thinks About Expressions, Minimal rule engine example (+13 more)
 
 ### Community 72 - "Immutable Clone Strategy"
-Cohesion: 0.24
-Nodes (5): URI, RedirectPolicy, DisplayName, Test, RedirectPolicyTest
+Cohesion: 0.27
+Nodes (5): GuardrailAdvisorTest, ChatClientRequest, ChatClientResponse, DisplayName, Test
 
 ### Community 73 - "Immutable Clone Tests"
 Cohesion: 0.29
 Nodes (7): ClonesImmutableTest, DisplayName, MethodSource, ParameterizedTest, TestEnum, ACTIVE, INACTIVE
 
 ### Community 74 - "List Adapter"
-Cohesion: 0.06
-Nodes (28): Override, Override, Override, Override, Override, Override, Override, Override (+20 more)
+Cohesion: 0.09
+Nodes (32): CoalesceEvaluator, Override, DateMinusEvaluator, DateParseEvaluator, Override, NowEvaluator, DefaultIfNullEvaluator, Override (+24 more)
 
 ### Community 75 - "Type Adapter Implementations"
 Cohesion: 0.28
 Nodes (3): Entry, Override, MapCache
 
 ### Community 76 - "OAuth2RequestAuthenticatorTest"
-Cohesion: 0.10
-Nodes (15): DbAccessEvaluator, Override, SuppressWarnings, DbAccessor, DryRunResult, DSLContext, Override, JooqDbAccessor (+7 more)
+Cohesion: 0.18
+Nodes (7): GuaranteeScopeAdvisorTest, ChatResponse, DisplayName, Override, Prompt, Test, RecordingChatModel
 
 ### Community 77 - "Bean Sensitive Masker"
-Cohesion: 0.08
-Nodes (13): AstIndexAnalyzer, Builder, ExpressionIndexResolver, FunctionalInterface, IndexResolverRegistry, ExpressionIndexMetadata, FunctionalColumn, GinColumn (+5 more)
+Cohesion: 0.07
+Nodes (15): AstIndexAnalyzer, Builder, ExpressionIndexResolver, FunctionalInterface, IndexResolverRegistry, AggregateQueryFamily, Override, ExpressionIndexMetadata (+7 more)
 
 ### Community 79 - "Composite Plugin Loader Tests"
 Cohesion: 0.50
@@ -629,24 +654,24 @@ Cohesion: 0.57
 Nodes (3): DisplayName, Test, PluginClassLoaderTest
 
 ### Community 88 - "Greeter Implementations"
-Cohesion: 0.06
-Nodes (11): ConcreteIndex, Builder, IndexFamily, Override, IndexType, AGGREGATION, FUNCTIONAL, GIN (+3 more)
+Cohesion: 0.09
+Nodes (9): ConcreteIndex, IndexFamily, Override, IndexType, AGGREGATION, FUNCTIONAL, GIN, IndexPlanner (+1 more)
 
 ### Community 89 - "String Similarity Evaluator"
 Cohesion: 0.15
 Nodes (13): 10.1 Default transport — `transport/jdk/JdkHttpTransport` (§2, §6.4), 10.2 Batching throttle — `BatchingSpec` + `executeAll`, 10. Milestone 2 — Default JDK transport + batching throttle, 1. Design Principles, 2. Package Structure, 4. The Execution Pipeline, 5. Requirements → Design Mapping, 7. Security Contract (non-negotiable) (+5 more)
 
 ### Community 90 - "Boolean Logic Evaluator"
-Cohesion: 0.17
-Nodes (10): Builder, Override, SSLContext, URI, X509TrustManager, JdkHttpTransport, MtlsKey, HttpClient (+2 more)
+Cohesion: 0.15
+Nodes (7): InstalledPlugin, ClasspathSource, FileSource, URL, PluginSource, UrlSource, PluginStore
 
 ### Community 91 - "String Fuzzy Match Evaluator"
-Cohesion: 0.22
-Nodes (9): 1. The Big Idea, 2.1 `IHttpRequestOptions` — the _canonical HTTP request_ (transport contract), 2.2 `DeclarativeRestApiSettings.ResultOptions` — the _request plan_ (engine contract), 2. The Two Configuration Layers, 3. The Runtime Engine — `routing-node.ts`, Expression context keys observed in the wild, `getRequestOptionsFromParameters` — the merge rules (critical semantics), Research — n8n's Declarative HTTP System & Real-World Usage (+1 more)
+Cohesion: 0.50
+Nodes (4): 3. The Runtime Engine — `routing-node.ts`, Expression context keys observed in the wild, `getRequestOptionsFromParameters` — the merge rules (critical semantics), The pipeline, precisely
 
 ### Community 92 - "Join Types"
-Cohesion: 0.22
-Nodes (9): 4.1 `requestDefaults` — node-level defaults, 4.2 `routing.request` — per-operation request shape, 4.3 `routing.send` — parameter value → request mapping, 4.4 `routing.output` + `postReceive` — response shaping, 4.5 Pagination, 4.6 Credentials / authentication, 4.7 Design-time (metadata) HTTP — `loadOptions` / `listSearch` / resource locators, 4.8 Transport / security behaviors worth porting (+1 more)
+Cohesion: 0.14
+Nodes (14): 1. The Big Idea, 2.1 `IHttpRequestOptions` — the _canonical HTTP request_ (transport contract), 2.2 `DeclarativeRestApiSettings.ResultOptions` — the _request plan_ (engine contract), 2. The Two Configuration Layers, 4.1 `requestDefaults` — node-level defaults, 4.2 `routing.request` — per-operation request shape, 4.3 `routing.send` — parameter value → request mapping, 4.4 `routing.output` + `postReceive` — response shaping (+6 more)
 
 ### Community 93 - "Agent Skills"
 Cohesion: 0.40
@@ -673,12 +698,12 @@ Cohesion: 0.67
 Nodes (3): FriendlyGreeter, Greeter, @PluginInfo
 
 ### Community 101 - "Headers"
-Cohesion: 0.32
+Cohesion: 0.31
 Nodes (5): DisplayName, Override, Test, OffsetPaginationTest, QueueTransport
 
 ### Community 104 - ".capsAtMax"
-Cohesion: 0.06
-Nodes (37): BearerAuth, BinaryBody, BodyKind, BINARY, FORM, JSON, NONE, RAW (+29 more)
+Cohesion: 0.09
+Nodes (25): BearerAuth, FilePart, FormBody, DisplayName, Test, PagePaginationTest, HttpRequestTest, DisplayName (+17 more)
 
 ### Community 142 - "Literal"
 Cohesion: 0.25
@@ -697,12 +722,12 @@ Cohesion: 0.25
 Nodes (7): Acceptance criteria, Design notes, Files to create (`src/main/java/io/github/khezyapp/dhttp/expr/`), Hand-off context, Hand-off to next task, Objective, Task 04 — Expression SPI + JEXL + `doa.*` namespace (`expr/`)
 
 ### Community 146 - "ServiceLoaderPluginLoader"
-Cohesion: 0.05
-Nodes (16): EvaluationError, AstEvaluator, ChildResult, DefaultEvaluationCache, Override, EvaluationCache, EvaluationResult, Override (+8 more)
+Cohesion: 0.06
+Nodes (15): BooleanLogicEvaluator, Override, ComparisonEvaluator, SuppressWarnings, EvaluationError, DefaultEvaluationCache, Override, CoreFunctions (+7 more)
 
 ### Community 147 - "PagePaginationTest.java"
-Cohesion: 0.29
-Nodes (5): ChronoUnit, DatePlusEvaluator, CoreUtils, Entry, Temporal
+Cohesion: 0.19
+Nodes (3): EvaluationScope, SuppressWarnings, RequestPlanner
 
 ### Community 148 - "SchemaException"
 Cohesion: 0.25
@@ -745,8 +770,8 @@ Cohesion: 0.25
 Nodes (7): Acceptance criteria, Completion, Design notes, Files to create (all in `src/test/java/io/github/khezyapp/dhttp/acceptance/`), Hand-off context, Objective, Task 15 — Acceptance milestone (§9 of the design doc)
 
 ### Community 158 - "BuiltinSupport"
-Cohesion: 0.10
-Nodes (8): FunctionalInterface, StreamCheck, Pattern, StreamKeywordsCheck, Override, StreamUrlsCheck, StreamPipeline, MatchAccumulator
+Cohesion: 0.05
+Nodes (19): AuditRecord, ScanOutcome, FunctionalInterface, StreamCheck, Detector, FunctionalInterface, Override, Pattern (+11 more)
 
 ### Community 159 - "6. SPI Details (what implementers extend)"
 Cohesion: 0.29
@@ -761,40 +786,36 @@ Cohesion: 0.25
 Nodes (5): Contents, declarative-http — Scrum Workspace, Flow, Status: Implementation done (v1 milestone), Status: Milestone 2 done (default JDK transport + batching throttle)
 
 ### Community 162 - "3. Core Abstractions — Java API Sketch"
-Cohesion: 0.15
-Nodes (7): InstalledPlugin, ClasspathSource, FileSource, URL, PluginSource, UrlSource, PluginStore
+Cohesion: 0.20
+Nodes (7): JexlEngine, SuppressWarnings, JexlExpressionEvaluator, SetKeyValue, DisplayName, Test, SetKeyValueTest
 
 ### Community 165 - "JoinType"
-Cohesion: 0.14
-Nodes (15): DSLContext, Field, Override, SuppressWarnings, JooqSqlDialect, FunctionExpr, JoinType, CROSS (+7 more)
+Cohesion: 0.11
+Nodes (8): GuardrailResult, CustomRegexCheck, Override, Pattern, Override, PiiCheck, Match, MatchSelection
 
 ### Community 166 - ".create"
-Cohesion: 0.06
-Nodes (20): Pattern, SecretConfig, Detector, FunctionalInterface, Override, Pattern, SecretKeysCheck, Override (+12 more)
+Cohesion: 0.10
+Nodes (15): Pattern, SecretConfig, Override, Pattern, SecretKeysCheck, SecretCandidateFilter, params(), SecretPreset (+7 more)
 
 ### Community 167 - "JexlExpressionEvaluator"
 Cohesion: 0.25
 Nodes (5): Documented, Retention, MarkAsImmute, ImmutableStrategy, Override
 
 ### Community 169 - "Cloner"
-Cohesion: 0.34
-Nodes (6): CustomRegexConfig, Pattern, PiiConfig, DisplayName, Test, PiiCheckTest
+Cohesion: 0.21
+Nodes (9): CustomRegexConfig, Pattern, PiiConfig, PiiCoverage, ALL, SELECTED, DisplayName, Test (+1 more)
 
 ### Community 170 - "DisplayName"
-Cohesion: 0.47
-Nodes (3): DisplayName, Test, NextUrlPaginationTest
+Cohesion: 0.24
+Nodes (5): Override, NextUrlPagination, DisplayName, Test, NextUrlPaginationTest
 
 ### Community 171 - "SecretRedactor"
 Cohesion: 0.27
 Nodes (4): SecretRedactor, DisplayName, Test, SecretRedactorTest
 
-### Community 172 - "DbAccessor"
-Cohesion: 0.10
-Nodes (4): AggregateQueryFamily, Builder, Override, PlannerPlanIndexFamiliesTests
-
 ### Community 173 - ".of"
-Cohesion: 0.28
-Nodes (6): BatchingSpec, BatchingAcceptanceTest, DisplayName, SecretKey, Test, TimingTransport
+Cohesion: 0.24
+Nodes (7): BatchingSpec, BatchingAcceptanceTest, DisplayName, Override, SecretKey, Test, TimingTransport
 
 ### Community 174 - ".evaluate"
 Cohesion: 0.35
@@ -805,8 +826,8 @@ Cohesion: 0.25
 Nodes (8): Custom CredentialRepository / CredentialCipher / KeyProvider, Custom ExpressionEvaluator, Custom HttpTransport, Custom pagination, Custom post-receive action, Custom TokenStore, Extending the library, Pre-send hooks
 
 ### Community 176 - ".describeReturnsShapedOptions"
-Cohesion: 0.35
-Nodes (5): ColumnRef, Literal, DisplayName, Test, JooqSqlDialectTest
+Cohesion: 0.24
+Nodes (5): URI, RedirectPolicy, DisplayName, Test, RedirectPolicyTest
 
 ### Community 177 - "JexlEngineFactory.java"
 Cohesion: 0.25
@@ -818,115 +839,115 @@ Nodes (3): Override, SuppressWarnings, ListAdapter
 
 ### Community 179 - "Auth"
 Cohesion: 0.08
-Nodes (22): InMemoryTokenStore, DeclarativeHttpEngine, OptionItem, OptionPage, RequestContext, HttpRequestSpec, Builder, Output (+14 more)
+Nodes (15): CredentialService, CredentialStore, FunctionalInterface, FunctionalInterface, SecretKey, KeyProvider, TokenStore, Builder (+7 more)
 
 ### Community 180 - "OAuth2Grant"
 Cohesion: 0.07
-Nodes (23): DecryptedCredential, OAuth2Credentials, Override, OAuth2AuthorizationFlow, OAuth2Grant, AUTHORIZATION_CODE, CLIENT_CREDENTIALS, PASSWORD (+15 more)
+Nodes (20): Override, OAuth2AuthorizationFlow, OAuth2Grant, AUTHORIZATION_CODE, CLIENT_CREDENTIALS, PASSWORD, REFRESH_TOKEN, OAuth2RequestAuthenticator (+12 more)
 
 ### Community 181 - "OAuth2AuthorizationFlow"
 Cohesion: 0.36
 Nodes (4): UrlsConfig, DisplayName, Test, UrlsCheckTest
 
 ### Community 182 - "QueueTransport"
-Cohesion: 0.09
-Nodes (9): AuditRecord, GuardrailResult, Guardrails, GuardrailsOutcome, Operation, CLASSIFY, SANITIZE, ScanOutcome (+1 more)
+Cohesion: 0.08
+Nodes (11): GuardrailCheck, FunctionalInterface, GuardrailCheckFactory, FunctionalInterface, Guardrails, GuardrailsConfig, ParallelStageRunner, GuardrailPipeline (+3 more)
 
 ### Community 184 - "PagePaginationTest.java"
-Cohesion: 0.16
-Nodes (8): Verdict, CapturingClassifier, FlaggingClassifier, GuardrailPipelineTest, DisplayName, Override, Test, ThrowingClassifier
+Cohesion: 0.17
+Nodes (7): CapturingClassifier, FlaggingClassifier, GuardrailPipelineTest, DisplayName, Override, Test, ThrowingClassifier
 
 ### Community 187 - ".create"
-Cohesion: 0.25
-Nodes (6): AuthResult, Setter, Override, GenericAuthenticatorTest, DisplayName, Test
+Cohesion: 0.16
+Nodes (10): Authenticator, FunctionalInterface, AuthResult, Setter, DecryptedCredential, Override, Override, GenericAuthenticatorTest (+2 more)
 
 ### Community 188 - "OAuth2ConfigTimeAcceptanceTest"
-Cohesion: 0.19
-Nodes (8): Holder, Pattern, PiiPatterns, DisplayName, MethodSource, ParameterizedTest, Test, PiiPatternsTest
+Cohesion: 0.22
+Nodes (8): EndToEndGuardrailAdvisorTest, ChatResponse, DisplayName, Flux, Override, Prompt, Test, RecordingChatModel
 
 ### Community 189 - "khezy-dhttp-testing/SKILL.md"
 Cohesion: 0.33
 Nodes (5): 1. Records come from post-receives, not from the response itself, 2. Measuring batching pacing in a fake transport, 3. n8n batching semantics (throttle, not payload-combining), 4. Worker-thread exceptions, 5. Local HTTP(S) servers for transport tests
 
 ### Community 190 - "DeclarativeHttpConfigTest.java"
-Cohesion: 0.18
-Nodes (7): CapturingClassifier, FlaggingClassifier, GuardrailsTest, DisplayName, Override, Test, ThrowingClassifier
+Cohesion: 0.12
+Nodes (14): Hand-off Log — Data Privacy Spring AI v2 (Advisors), Task 01 — Shared types — DONE, Task 02 — DataPrivacyAdvisor — DONE, Task 03 — GuardrailAdvisor — DONE, Task 04 — Composition acceptance — DONE, Template (copy into the END of this file when a task finishes), Cross-cutting acceptance guardrails, Data Privacy Spring AI — v2 Advisor Action Plan (+6 more)
 
 ### Community 192 - ".registerDateBuiltins"
 Cohesion: 0.34
 Nodes (6): ClientTlsConfigTest, DisplayName, KeyPair, PrivateKey, Test, X509Certificate
 
 ### Community 193 - ".evaluate"
-Cohesion: 0.12
-Nodes (14): DisplayName, SecretKey, Test, OAuth2ConfigTimeAcceptanceTest, DeclarativeHttpConfigTest, BeforeEach, DisplayName, SecretKey (+6 more)
+Cohesion: 0.14
+Nodes (11): BasicAuthCredentials, DeclarativeHttpConfigTest, BeforeEach, DisplayName, SecretKey, Test, DeclarativeHttpTest, BeforeEach (+3 more)
 
 ### Community 194 - "ArrayFormat"
-Cohesion: 0.24
-Nodes (5): CapturingClassifier, GuardrailsStreamingTest, DisplayName, Override, Test
+Cohesion: 0.34
+Nodes (5): RootProperty, DisplayName, Test, RootPropertyTest, BeforeEach
 
 ### Community 195 - ".switchIsExhaustive"
-Cohesion: 0.19
-Nodes (5): CustomRegexCheck, Override, Pattern, Override, PiiCheck
+Cohesion: 0.11
+Nodes (14): BinaryBody, Body, BodyKind, BINARY, FORM, JSON, NONE, RAW (+6 more)
 
 ### Community 196 - ".evaluate"
-Cohesion: 0.10
-Nodes (21): CoalesceEvaluator, DateDiffEvaluator, DateFormatEvaluator, DateMinusEvaluator, DateParseEvaluator, NowEvaluator, IsEmptyEvaluator, ListEvaluator (+13 more)
+Cohesion: 0.24
+Nodes (8): EndToEndDataPrivacyAdvisorTest, ChatResponse, DisplayName, Flux, Override, Prompt, Test, RecordingChatModel
 
 ### Community 197 - "InstalledPlugin"
 Cohesion: 0.19
 Nodes (5): Override, Pattern, URI, UrlsCheck, UrlSpan
 
 ### Community 198 - "ServiceLoaderPluginLoader"
-Cohesion: 0.23
-Nodes (6): DisplayName, Override, SecretKey, Test, PaginationAcceptanceTest, QueueTransport
-
-### Community 199 - ".describeReturnsShapedOptions"
-Cohesion: 0.13
-Nodes (3): Charset, Headers, RawResponse
+Cohesion: 0.35
+Nodes (4): DisplayName, SecretKey, Test, PaginationAcceptanceTest
 
 ### Community 200 - "FilterItemsTest.java"
-Cohesion: 0.10
-Nodes (19): FilterItems, SetKeyValue, SortByKey, Override, FilterItemsTest, DisplayName, Test, DisplayName (+11 more)
+Cohesion: 0.24
+Nodes (8): FilterItems, SortByKey, FilterItemsTest, DisplayName, Test, DisplayName, Test, SortByKeyTest
 
 ### Community 201 - "SetKeyValueTest.java"
 Cohesion: 0.07
 Nodes (18): AhoCorasick, FunctionalInterface, MatchVisitor, Node, Output, Pattern, Placeholders, StreamRedactor (+10 more)
 
 ### Community 202 - ".fromMap"
-Cohesion: 0.23
-Nodes (7): ChecksumValidators, Pattern, ChecksumValidatorsTest, DisplayName, ParameterizedTest, Test, ValueSource
+Cohesion: 0.32
+Nodes (5): ChecksumValidatorsTest, DisplayName, ParameterizedTest, Test, ValueSource
 
 ### Community 203 - "certificate-util"
 Cohesion: 0.33
 Nodes (5): certificate-util, ClientTlsConfig, Coordinates, Dependency, What it does
 
 ### Community 206 - "Cloner"
-Cohesion: 0.21
-Nodes (8): ChatModel, EndToEndSpringAiTest, ChatResponse, DisplayName, Override, Prompt, Test, StubChatModel
+Cohesion: 0.20
+Nodes (7): EndToEndSpringAiTest, ChatResponse, DisplayName, Override, Prompt, Test, StubChatModel
 
 ### Community 207 - "3. Core Abstractions — Java API Sketch"
 Cohesion: 0.40
 Nodes (5): 3.1 The spec model (declarative, immutable), 3.2 The plan & context (per-item runtime), 3.3 The engine (pure, deterministic), 3.4 Transport-neutral request value object, 3. Core Abstractions — Java API Sketch
+
+### Community 208 - "NonStringKeyExpressionException.java"
+Cohesion: 0.33
+Nodes (5): DisplayName, MethodSource, ParameterizedTest, Test, PiiPatternsTest
 
 ### Community 209 - "Design doc → action plan"
 Cohesion: 0.10
 Nodes (19): `00-HANDOFF.md`, `00-INDEX.md`, Cross-cutting acceptance guardrails (write into INDEX), Deliverable specs, Design doc → action plan, Exit criteria, Focus mode (`focus` argument), Hand-off protocol (write into INDEX verbatim) (+11 more)
 
 ### Community 210 - "JacksonJsonMapperTest"
-Cohesion: 0.18
-Nodes (5): PiiCoverage, ALL, SELECTED, Override, StreamPiiCheck
+Cohesion: 0.26
+Nodes (5): HttpErrorFactory, Pattern, HttpErrorFactoryTest, DisplayName, Test
 
 ### Community 211 - "InMemoryCredentialRepository"
 Cohesion: 0.28
-Nodes (4): LlmContract, DisplayName, Test, LlmContractTest
+Nodes (6): DataPrivacyAdvisorTest, ChatClientRequest, ChatClientResponse, DisplayName, Test, UserMessage
 
 ### Community 212 - "DisplayName"
-Cohesion: 0.42
-Nodes (3): DisplayName, Test, SecretKeysCheckTest
+Cohesion: 0.21
+Nodes (9): InMemoryTokenStore, RequestContext, Output, DeclarativeHttpEngineTest, FailingTransport, DisplayName, SuppressWarnings, Test (+1 more)
 
 ### Community 213 - "CredentialLifecycleAcceptanceTest"
-Cohesion: 0.06
-Nodes (17): BeanOutputConverter, LlmPolicyPrompts, DisplayName, Test, LlmPolicyPromptsTest, Builder, ChatClient, Override (+9 more)
+Cohesion: 0.07
+Nodes (14): BeanOutputConverter, Verdict, LlmPolicyPrompts, DisplayName, Test, LlmPolicyPromptsTest, Builder, ChatClient (+6 more)
 
 ### Community 214 - "Scenario demos"
 Cohesion: 0.40
@@ -945,16 +966,16 @@ Cohesion: 0.10
 Nodes (20): 03 — Java Library Implementation Mapping, 10. Suggested module layout, 11. Open questions to resolve in the implementation task, 1. Design goals (from the theory), 2. Core types (language-neutral → Java), 3. Pipeline (Theory §3, Reference §3–4), 4. Redactor (Theory §8), 5.1 `PiiCheck` — entity catalog + regex analyzer (Theory §6, Reference §5.1) (+12 more)
 
 ### Community 218 - ".create"
-Cohesion: 0.18
-Nodes (8): JexlEngine, Override, SuppressWarnings, JexlExpressionEvaluator, DisplayName, Test, JexlExpressionEvaluatorTest, Sample
+Cohesion: 0.31
+Nodes (5): Override, DisplayName, Test, JexlExpressionEvaluatorTest, Sample
 
 ### Community 219 - "Files to create (all under `securities/data-privacy-core/src/main/java/io/github/khezyapp/dpriv/`)"
 Cohesion: 0.15
 Nodes (12): Acceptance criteria, `api/` — configuration schema (design §5.4 schema; §8 default table), `api/` — outcome records (design §5.3), `api/` — page/token budget & `Guardrails` placeholder, `api/` — records, functional types, facade, config, Files to create (all under `securities/data-privacy-core/src/main/java/io/github/khezyapp/dpriv/`), Hand-off context, Hand-off to next task (log in 00-HANDOFF.md) (+4 more)
 
 ### Community 220 - "DisplayName"
-Cohesion: 0.36
-Nodes (3): ActionRegistry, FunctionalInterface, PostReceiveFactory
+Cohesion: 0.12
+Nodes (13): Getter, NonStringKeyExpressionException, FragmentMerger, SuppressWarnings, Builder, Operation, PreSend, Builder (+5 more)
 
 ### Community 221 - ".switchIsExhaustive"
 Cohesion: 0.23
@@ -1017,8 +1038,8 @@ Cohesion: 0.29
 Nodes (7): Cross-cutting acceptance guardrails, Data Privacy — v1 Implementation Action Plan, Dependency graph, Hand-off protocol (required), Modules & conventions (read first), Sequencing notes, Task list
 
 ### Community 237 - "11. Family B: LLM-as-judge checks — Spring AI is the default (decision §1.1)"
-Cohesion: 0.33
-Nodes (6): 11.1 The SPI stays in core (zero Spring dependency), 11.2 The contract (unchanged from theory §4 / 02 §6), 11.3 `SpringAiLlmClassifier` — the canonical implementation, 11.4 Built-in policy prompts (ported from 02 §6), 11.5 Claims, not guarantees (N1), 11. Family B: LLM-as-judge checks — Spring AI is the default (decision §1.1)
+Cohesion: 0.24
+Nodes (8): Target, BODY, QUERY, IgnoreClone, Documented, Retention, Retention, PluginInfo
 
 ### Community 238 - "9. Family A checks (deterministic)"
 Cohesion: 0.33
@@ -1037,8 +1058,8 @@ Cohesion: 0.28
 Nodes (4): Tokenizer, DisplayName, Test, TokenizerTest
 
 ### Community 242 - "SortDirection"
-Cohesion: 0.17
-Nodes (12): API surface, Building and testing, Classification with an LLM classifier (Spring AI), Credits, data-privacy-core, Enabling keywords and URL validation, Gradle, Guarantees (+4 more)
+Cohesion: 0.12
+Nodes (14): Attributions, CREDITS, API surface, Building and testing, Classification with an LLM classifier (Spring AI), Credits, data-privacy-core, Enabling keywords and URL validation (+6 more)
 
 ### Community 243 - "2. Positioning: a data privacy & security library, not an LLM library"
 Cohesion: 0.54
@@ -1053,16 +1074,20 @@ Cohesion: 0.18
 Nodes (10): Building and testing, Built-in families, Custom classifier, data-privacy-spring-ai, Gradle, Installation, Introduction, Maven (+2 more)
 
 ### Community 250 - "AesGcmCredentialCipher"
-Cohesion: 0.27
-Nodes (5): CapturingClassifier, DisplayName, Override, Test, LlmCheckTest
+Cohesion: 0.11
+Nodes (13): Builder, DataPrivacyAdvisor, AdvisorChain, ChatClientRequest, ChatClientResponse, Flux, Override, Prompt (+5 more)
 
 ### Community 251 - "RawResponse"
-Cohesion: 0.45
-Nodes (3): CustomRegexCheckTest, DisplayName, Test
+Cohesion: 0.32
+Nodes (3): ActionRegistry, FunctionalInterface, PostReceiveFactory
+
+### Community 252 - ".decryptTyped"
+Cohesion: 0.13
+Nodes (12): Override, SSLContext, URI, X509TrustManager, JdkHttpTransport, MtlsKey, HttpClient, SSLParameters (+4 more)
 
 ### Community 253 - "Target"
-Cohesion: 0.24
-Nodes (8): Target, BODY, QUERY, IgnoreClone, Documented, Retention, Retention, PluginInfo
+Cohesion: 0.27
+Nodes (5): CapturingClassifier, DisplayName, Override, Test, LlmCheckTest
 
 ### Community 254 - "Cloner"
 Cohesion: 0.12
@@ -1072,49 +1097,149 @@ Nodes (17): Hand-off Log — Data Privacy v1, Task 01 — module scaffold — DO
 Cohesion: 0.39
 Nodes (3): DisplayName, Test, StreamRedactorTest
 
-### Community 256 - ".capsAtMax"
-Cohesion: 0.53
-Nodes (4): LimitItems, DisplayName, Test, LimitItemsTest
-
 ### Community 257 - "HttpResultTest"
 Cohesion: 0.54
 Nodes (3): HttpResultTest, DisplayName, Test
+
+### Community 258 - "ServiceLoaderPluginLoader"
+Cohesion: 0.28
+Nodes (8): ChunkedChatModel, GuardrailAdvisorStreamTest, ChatResponse, DisplayName, Flux, Override, Prompt, Test
 
 ### Community 259 - "TextChunkerTest"
 Cohesion: 0.37
 Nodes (3): DisplayName, Test, TextChunkerTest
 
+### Community 260 - "PagePaginationTest"
+Cohesion: 0.09
+Nodes (10): DataPrivacyException, GuardrailEvaluationException, PolicyViolationException, RedactionException, ProtectionScope, BOTH, INPUT, OUTPUT (+2 more)
+
 ### Community 261 - "ObjectAccessor"
-Cohesion: 0.47
-Nodes (3): DisplayName, Test, RedactorTest
+Cohesion: 0.27
+Nodes (6): Override, TypeReference, JacksonJsonMapperTest, DisplayName, Test, Sample
 
 ### Community 262 - ".sortsAscending"
 Cohesion: 0.57
 Nodes (3): DisplayName, Test, PaginationSpecTest
 
 ### Community 263 - "OAuth2AuthorizationFlow"
-Cohesion: 0.43
-Nodes (3): KeyStore, SSLContext, TrustManager
+Cohesion: 0.13
+Nodes (9): TypeReference, CursorPagination, Override, SuppressWarnings, PaginationSupport, JsonBody, CursorPaginationTest, DisplayName (+1 more)
+
+### Community 264 - "Files to create"
+Cohesion: 0.12
+Nodes (15): 1. `ProtectionScope.java`, 2. `RedactMode.java`, 3. `RedactionReport.java`, 4. `GuardrailReport.java`, 5. `exception/DataPrivacyException.java`, 6. `exception/RedactionException.java`, 7. `exception/PolicyViolationException.java`, 8. `exception/GuardrailEvaluationException.java` (+7 more)
+
+### Community 265 - "DataPrivacyAdvisorStreamTest.java"
+Cohesion: 0.21
+Nodes (10): ChatModel, ChunkedChatModel, DataPrivacyAdvisorStreamTest, ChatResponse, DisplayName, Flux, Override, Prompt (+2 more)
+
+### Community 266 - ".withBuiltins"
+Cohesion: 0.29
+Nodes (7): CustomPostReceive, DisplayName, SuppressWarnings, Test, ActionRegistryTest, DisplayName, Test
+
+### Community 267 - "Builder"
+Cohesion: 0.33
+Nodes (3): DateDiffEvaluator, DateExtractEvaluator, DatePlusEvaluator
+
+### Community 268 - ".of"
+Cohesion: 0.36
+Nodes (4): BinaryData, HttpRequestSpecTest, DisplayName, Test
+
+### Community 269 - "Task 04 — Composition acceptance: end-to-end order, guarantee regression, README"
+Cohesion: 0.15
+Nodes (12): 1. `EndToEndDataPrivacyAdvisorTest.java`, 2. `EndToEndGuardrailAdvisorTest.java`, 3. `CompositionOrderTest.java` — the parity/composition slice (design §11), 4. `GuaranteeScopeAdvisorTest.java` — G8–G16 regression (design §5.1), 5. README update — `securities/data-privacy-spring-ai/README.md`, Design notes, Files to create, Hand-off context (+4 more)
+
+### Community 271 - "Task 02 — `DataPrivacyAdvisor` (mitigate pattern): builder, before/after, streaming"
+Cohesion: 0.18
+Nodes (10): 1. `DataPrivacyAdvisor.java`, Acceptance criteria, Behavior spec (design §8.1–8.4, pinned), Design notes, Files to create, Hand-off context, Hand-off to next task (log in 00-HANDOFF.md), Objective (+2 more)
+
+### Community 272 - "Task 03 — `GuardrailAdvisor` (prevent pattern): builder, before/after, streaming"
+Cohesion: 0.18
+Nodes (10): 1. `GuardrailAdvisor.java`, Acceptance criteria, Behavior spec (design §8.5–8.8, pinned), Design notes, Files to create, Hand-off context, Hand-off to next task (log in 00-HANDOFF.md), Objective (+2 more)
+
+### Community 273 - ".evaluate"
+Cohesion: 0.09
+Nodes (17): ChronoUnit, ArithmeticEvaluator, Override, Override, Override, Override, DateFormatEvaluator, Override (+9 more)
+
+### Community 274 - "AdvisorTypesTest"
+Cohesion: 0.37
+Nodes (4): DisplayName, SecretKey, Test, OAuth2ConfigTimeAcceptanceTest
+
+### Community 275 - "CustomRegexCheckTest"
+Cohesion: 0.45
+Nodes (3): CustomRegexCheckTest, DisplayName, Test
+
+### Community 276 - ".isStrictMatch"
+Cohesion: 0.35
+Nodes (3): Holder, Pattern, PiiPatterns
+
+### Community 277 - "GuardrailReport.java"
+Cohesion: 0.12
+Nodes (14): BaseAdvisor, GuardrailsOutcome, Operation, CLASSIFY, SANITIZE, GuardrailAdvisor, AdvisorChain, ChatClientRequest (+6 more)
+
+### Community 278 - "8. Behavior specification"
+Cohesion: 0.20
+Nodes (10): 8.1 `DataPrivacyAdvisor.before(...)` — input redaction (scope INPUT | BOTH), 8.2 `DataPrivacyAdvisor.after(...)` — output redaction (scope OUTPUT | BOTH), 8.3 `DataPrivacyAdvisor.adviseStream(...)`, 8.4 `DataPrivacyAdvisor` failure semantics, 8.5 `GuardrailAdvisor.before(...)` — input gating (scope INPUT | BOTH), 8.6 `GuardrailAdvisor.after(...)` — output gating (scope OUTPUT | BOTH), 8.7 `GuardrailAdvisor.adviseStream(...)`, 8.8 `GuardrailAdvisor` failure semantics (+2 more)
+
+### Community 279 - ".capsAtMax"
+Cohesion: 0.53
+Nodes (4): LimitItems, DisplayName, Test, LimitItemsTest
+
+### Community 280 - "Advisors"
+Cohesion: 0.22
+Nodes (9): Advisors, Exception reference, Non-guarantees, Observability, Ordering rule, Quick-start 1 — redaction only (MITIGATE), Quick-start 2 — redaction + gating (MITIGATE + PREVENT), Scope and mode reference (+1 more)
+
+### Community 281 - "11. Family B: LLM-as-judge checks — Spring AI is the default (decision §1.1)"
+Cohesion: 0.33
+Nodes (6): 11.1 The SPI stays in core (zero Spring dependency), 11.2 The contract (unchanged from theory §4 / 02 §6), 11.3 `SpringAiLlmClassifier` — the canonical implementation, 11.4 Built-in policy prompts (ported from 02 §6), 11.5 Claims, not guarantees (N1), 11. Family B: LLM-as-judge checks — Spring AI is the default (decision §1.1)
+
+### Community 283 - "10. Streaming engine (decision §1.4)"
+Cohesion: 0.50
+Nodes (4): 10.1 `TextChunker` — windowed reader with overlap, 10.2 Bounded memory guarantee, 10.3 Streaming variants per check, 10. Streaming engine (decision §1.4)
+
+### Community 284 - "6. Pipeline"
+Cohesion: 0.50
+Nodes (4): 6.1 In-memory path (classify / sanitize), 6.2 Streaming path (detect + redact — the data-pipeline/log use case), 6.3 Why classification (incl. LLM) is not streaming (decision §1.4), 6. Pipeline
+
+### Community 285 - "2. Positioning: a data privacy & security library, not an LLM library"
+Cohesion: 0.67
+Nodes (3): 2.1 Use cases, 2.2 Design consequences of the reframing, 2. Positioning: a data privacy & security library, not an LLM library
+
+### Community 286 - "3. Compliance / masking policy: guarantee scope"
+Cohesion: 0.67
+Nodes (3): 3.1 What the library guarantees, 3.2 What the library does NOT guarantee (claims, not guarantees), 3. Compliance / masking policy: guarantee scope
+
+### Community 287 - "4. Module & package layout"
+Cohesion: 0.67
+Nodes (3): 4.1 `securities/data-privacy-core` — build.gradle, 4.2 `securities/data-privacy-spring-ai` — build.gradle, 4. Module & package layout
+
+### Community 288 - "7. Redactor & the `<ENTITY>` placeholder contract"
+Cohesion: 0.67
+Nodes (3): 7.1 Placeholder contract (decision §1.2), 7.2 Replacement engine, 7. Redactor & the `<ENTITY>` placeholder contract
+
+### Community 289 - "8. PII catalog — the full entity list (decision §1.3)"
+Cohesion: 0.67
+Nodes (3): 8.1 Analyzer engine, 8.2 Optional checksum validation (design addition, opt-in `strict` flag), 8. PII catalog — the full entity list (decision §1.3)
 
 ## Knowledge Gaps
-- **623 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `EQUAL`, `LESS_THAN`, `LESS_OR_EQUAL` (+618 more)
+- **713 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `EQUAL`, `LESS_THAN`, `LESS_OR_EQUAL` (+708 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Condition` connect `JoinType` to `Sensitive Masker Builders`, `Clone Ignore Strategy`, `Built-in Function Registration`?**
-  _High betweenness centrality (0.290) - this node is a cross-community bridge._
-- **Why does `Arguments` connect `String Contains Tests` to `String Utility Tests`, `Payload Evaluator Tests`, `.evaluate`, `Date Extraction Evaluator`, `List Adapter`, `DB Aggregator Evaluator`, `OAuth2RequestAuthenticatorTest`, `ServiceLoaderPluginLoader`, `PagePaginationTest.java`, `OAuth2ConfigTimeAcceptanceTest`?**
-  _High betweenness centrality (0.230) - this node is a cross-community bridge._
-- **Why does `PiiEntity` connect `Index Family` to `Cloner`, `JacksonJsonMapperTest`, `.switchIsExhaustive`, `OAuth2ConfigTimeAcceptanceTest`?**
-  _High betweenness centrality (0.178) - this node is a cross-community bridge._
+- **Why does `Condition` connect `AST Evaluator Dry Run` to `Sensitive Masker Builders`, `DisplayName`, `Aggregate Query Family`, `Dynamic Objects Tests`?**
+  _High betweenness centrality (0.271) - this node is a cross-community bridge._
+- **Why does `Arguments` connect `List Adapter` to `String Utility Tests`, `Payload Evaluator Tests`, `Date Extraction Evaluator`, `String Contains Tests`, `DB Aggregator Evaluator`, `NonStringKeyExpressionException.java`, `.evaluate`, `ServiceLoaderPluginLoader`?**
+  _High betweenness centrality (0.264) - this node is a cross-community bridge._
+- **Why does `PiiEntity` connect `Index Family` to `NonStringKeyExpressionException.java`, `Cloner`, `.isStrictMatch`, `JoinType`?**
+  _High betweenness centrality (0.206) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `HttpResult` (e.g. with `.copiesHeaders()` and `.decodesBytes()`) actually correct?**
   _`HttpResult` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 28 inferred relationships involving `Arguments` (e.g. with `.missingFieldNameArg()` and `.evaluate()`) actually correct?**
   _`Arguments` has 28 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `.opencode/plugins/graphify.js`, `EQUAL` to the rest of the system?**
-  _623 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _713 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Arithmetic Evaluation Tests` be split into smaller, more focused modules?**
   _Cohesion score 0.11818181818181818 - nodes in this community are weakly interconnected._
