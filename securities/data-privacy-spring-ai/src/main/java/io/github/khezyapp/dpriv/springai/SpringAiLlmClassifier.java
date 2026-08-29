@@ -136,6 +136,10 @@ public final class SpringAiLlmClassifier implements LlmClassifier {
         /**
          * Supplies a custom guardrail prompt block, overriding the built-in family prompt.
          *
+         * <p>This tunes only the persona (what to check). The library still appends its fixed
+         * {@link LlmPolicyPrompts#JSON_SCHEMA} — the {@code Verdict} return contract ({@code flagged} +
+         * {@code confidence}) — before the rules segment; the return schema is not customizable.</p>
+         *
          * @param value the guardrail prompt
          * @return this builder
          */
@@ -147,6 +151,9 @@ public final class SpringAiLlmClassifier implements LlmClassifier {
         /**
          * Supplies a custom system-rules block, overriding the built-in {@link LlmPolicyPrompts#SYSTEM_RULES}.
          * A {@code null} or blank value falls back to the built-in rules.
+         *
+         * <p>The rules only tune how the model scores the content; the fixed
+         * {@link LlmPolicyPrompts#JSON_SCHEMA} return contract is always present regardless of this value.</p>
          *
          * @param value the system rules
          * @return this builder

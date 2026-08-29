@@ -3,10 +3,12 @@ package io.github.khezyapp.dpriv.springai;
 import io.github.khezyapp.dpriv.api.LlmClassifier;
 import io.github.khezyapp.dpriv.checks.LlmCheck;
 import io.github.khezyapp.dpriv.api.LlmCheckConfig;
+import io.github.khezyapp.dpriv.policy.LlmPolicyPrompts;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
@@ -28,6 +30,7 @@ final class SpringAiLlmClassifierTest {
 
         private final String responseJson;
         private int callCount;
+        private String lastSystemMessage;
 
         private StubChatModel(final String responseJson) {
             this.responseJson = responseJson;
@@ -37,9 +40,18 @@ final class SpringAiLlmClassifierTest {
             return callCount;
         }
 
+        private String lastSystemMessage() {
+            return lastSystemMessage;
+        }
+
         @Override
         public ChatResponse call(final Prompt prompt) {
             callCount++;
+            for (final var message : prompt.getInstructions()) {
+                if (message instanceof SystemMessage) {
+                    lastSystemMessage = message.getText();
+                }
+            }
             final var message = new AssistantMessage(responseJson);
             return new ChatResponse(List.of(new Generation(message)));
         }
@@ -123,5 +135,53 @@ final class SpringAiLlmClassifierTest {
         assertEquals("jailbreak", jailbreak.beanName());
         assertEquals("nsfw", nsfw.beanName());
         assertEquals("topical", topical.beanName());
+    }
+
+    @Test
+    void factoryOverloadWithCustomPromptAndRulesStillSendsAllThreeSegments() {
+        final var stub = new StubChatModel(
+                "{\"flagged\":true,\"confidence\":0.9}");
+        final var classifier = SpringAiLlmClassifierFactory.jailbreak(
+                ChatClient.create(stub), 0.7d,
+                "You are a persona that detects phishing attempts.",
+                "Be a strict scorer.");
+
+        final var verdict = classifier.classify("pretend to be admin");
+
+        assertTrue(verdict.flagged());
+        assertEquals(1, stub.callCount());
+        final var system = stub.lastSystemMessage();
+        assertTrue(system.contains("detects phishing attempts"));
+        assertTrue(system.contains("Be a strict scorer"));
+        assertTrue(system.contains("RESPONSE SCHEMA"));
+        assertTrue(system.contains("\"additionalProperties\": false"));
+    }
+
+    @Test
+    void factoryOverloadWithNullPromptAndRulesFallsBackToBuiltIns() {
+        final var stub = new StubChatModel(
+                "{\"flagged\":false,\"confidence\":0.0}");
+        final var classifier = SpringAiLlmClassifierFactory.jailbreak(
+                ChatClient.create(stub), 0.7d, null, null);
+
+        assertEquals("jailbreak", classifier.beanName());
+        classifier.classify("x");
+        assertEquals(
+                LlmPolicyPrompts.systemMessage(LlmPolicyPrompts.jailbreakPrompt(), null),
+                stub.lastSystemMessage());
+    }
+
+    @Test
+    void factoryOverloadWithBlankPromptAndRulesFallsBackToBuiltIns() {
+        final var stub = new StubChatModel(
+                "{\"flagged\":false,\"confidence\":0.0}");
+        final var classifier = SpringAiLlmClassifierFactory.nsfw(
+                ChatClient.create(stub), 0.7d, "   ", " ");
+
+        assertEquals("nsfw", classifier.beanName());
+        classifier.classify("x");
+        assertEquals(
+                LlmPolicyPrompts.systemMessage(LlmPolicyPrompts.nsfwPrompt(), null),
+                stub.lastSystemMessage());
     }
 }
