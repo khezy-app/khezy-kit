@@ -1,0 +1,26 @@
+plugins {
+    id("khezy.java-library")
+    id("khezy.java-lombok")
+}
+
+group = "io.github.khezyapp"
+version = "1.0.0"
+
+mavenPublishing {
+    pom {
+        name = 'data-privacy-spring-ai'
+        description = """Spring AI adapter for the data-privacy-core engine: a ChatClient-backed LlmClassifier using BeanOutputConverter to deserialize core Verdict records."""
+    }
+}
+
+ext {
+    springAiVersion = "2.0.1"
+}
+
+dependencies {
+    api "io.github.khezyapp:data-privacy-core:1.0.0"
+    // Spring AI coordinates to confirm at implementation time (design §4.2 note):
+    implementation platform("org.springframework.ai:spring-ai-bom:${springAiVersion}")
+    implementation "org.springframework.ai:spring-ai-client-chat"
+    testImplementation "org.springframework.ai:spring-ai-test"
+}

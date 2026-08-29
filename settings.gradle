@@ -25,5 +25,7 @@ includeBuild("utils/pluginlib")
 includeBuild("utils/certificate-util")
 
 includeBuild("securities/data-masker")
+includeBuild("securities/data-privacy-core")
+includeBuild("securities/data-privacy-spring-ai")
 
 includeBuild("templates/simple-prompt-template")
